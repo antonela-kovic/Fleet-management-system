@@ -1,0 +1,600 @@
+/* App.css */
+
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+  height: 100%; /* Obavezno kako bi flex funkcije radile ispravno inače ne */
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Navbar styles */
+nav {
+  padding: 10px 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+.nav-logout{
+  color: white;
+}
+
+.text-title{
+  text-align: center;
+}
+
+/* Container */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%; 
+  display: grid;
+  place-items: center;
+}
+
+.container {
+  margin: 0; /* Uklanja automatske margine */
+  padding: 20px;
+  max-width: 800px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  /*background-color: white;
+
+  /* Flex centriranje */
+  display: flex;
+  flex-direction: column; /* ako sadržaj treba biti vertikalan */
+  justify-content: center;
+  align-items: center;
+
+  position: absolute; /* Centriranje na cijeloj stranici */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Form styles */
+form {
+  margin-bottom: 20px;
+}
+
+input,
+button,
+textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #003399;
+}
+
+/* List styles */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+li button {
+  margin-left: 10px;
+  background-color: #0044cc;
+}
+
+li button:hover {
+  background-color: #003399;
+}
+
+.remove-btn {
+  background:none;
+  border: none;
+  width: auto;
+  color:black;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;margin-left: 600px;
+  background-color:rgb(252, 252, 252);
+
+}
+
+.remove-btn:hover {
+  background-color:rgb(174, 170, 170);
+}
+
+/* Login.css*/
+/* Reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Login container */
+.login-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 900px;
+  background-color: white;
+  overflow: hidden;
+  border-radius: 0; /* Uklanja zaobljenje */
+  box-shadow: none; /* Uklanja vanjski shadow */
+  border: none; /* Uklanja vanjski obrub*/
+}
+
+/* Left side - Login form */
+.login-form {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form img {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-form form {
+  width: 100%;
+  max-width: 300px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.login-form button:hover {
+  background-color: #003399;
+}
+
+.login-form .register-link {
+  text-align: center;
+  margin-top: 10px;
+  color: #0044cc;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+/* Right side - Image */
+.login-image {
+  flex: 1;
+  min-width: 400px; /* Povećava minimalnu širinu */
+  background-image: url('../src/slike/Slika_vozila.webp'); 
+  background-size: cover;
+  background-position: center;
+  height: auto; /* Automatska visina */
+}
+
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-image {
+    height: 200px;
+  }
+}
+
+/*Dio za registraciju koji se nadovezuje na dio css-a za prijavu-Login.css*/
+/* Stil za select element */
+.form-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: white;
+  appearance: none; /* Uklanja defaultne stilove preglednika */
+}
+
+.dashboard-background {
+/* Stil za hover efekt na selectu */
+.form-select:hover {
+  border-color: #0044cc;
+}
+}
+
+/* EmployeeDashboard.css */
+.employee-dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%; /* Uklanja ograničenje širine */
+  height: 80vh; /* Puna visina zaslona */
+  margin: 0;
+  padding: 0;
+  gap: 0; /* Bez dodatnog razmaka */
+ /* max-width: 1000px;*/
+  
+}
+
+.dashboard-container button{
+   color:white;
+   background-color: #0044cc;
+}
+
+.content-left {
+  flex: 3; /* Proširuje lijevu stranu da zauzme više prostora */
+  padding: 40px;
+  background-color: white;
+  height: 100%; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodaje laganu sjenu  */
+  /*overflow-y: auto; /* Omogućava vertikalno skrolanje unutar sadržaja */
+  background-color: #f2efef;
+  border-radius: 2%;
+}
+
+.content-right {
+  flex: 2; /* Proširuje desnu stranu */
+  background-image: url('../src/slike/employee_poz1.jpg');
+  background-size: cover; /* Slika pokriva cijeli prostor */
+  background-position: center;
+  /*background-attachment: fixed; /* Fiksira sliku */
+  height: 80vh; 
+  overflow: hidden; /* Sprječava unutarnje skrolanje slike */
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1); /* Dodaje sjenu između sadržaja i slike */
+  border-radius: 2%;
+
+}
+
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.create-reservation-btn {
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-reservation-btn:hover {
+  background-color: #003399;
+}
+
+.reservations-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.reservations-list-container {
+  max-height: 300px; /* Maksimalna visina područja koje se može skrolati */
+  overflow-y: auto; /* Omogućava vertikalno skrolanje */
+  padding-right: 10px; /* Dodaje malo prostora za preglednost */
+}
+
+/* Stil za rezervacije */
+/* Rezervacije - omogućavanje skrolanja */
+.reservations-container {
+  max-height: 300px; 
+  overflow-y: auto; 
+  padding-right: 10px; /* Razmak od desnog ruba za skrol traku */
+}
+
+.reservations-list {
+  list-style: none; /* Uklanja bullet točke */
+  padding: 0;
+  margin: 0;
+}
+
+
+.reservation-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.reservations-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reservations-list-container::-webkit-scrollbar-thumb {
+  background-color: #0044cc;
+  border-radius: 5px;
+}
+
+.reservations-list-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Tamna pozadina */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centriranje modala */
+  z-index: 1000;
+}
+
+.modal-content {
+  background-image: url('../src/slike/employee_poz1.jpg'); 
+  background-size: cover;
+  /*background-position: center;*/
+  color:white; 
+  /*text-shadow: 1px 1px 2px white;*/
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Lagana sjena */
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.input-field,
+.textarea-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.close-modal-btn,
+.submit-reservation-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.close-modal-btn {
+  background-color: #ccc;
+  color: black;
+}
+
+.submit-reservation-btn {
+  background-color: #0044cc;
+  color: white;
+}
+
+.close-modal-btn:hover {
+  background-color: #999;
+}
+
+.submit-reservation-btn:hover {
+  background-color: #003399;
+}
+
+/*AdminDAshBoard.css*/
+/* Opća pozadina */
+.admin-dashboard-background {
+  background-image: url('../src/slike/pozadina2.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 20px;
+  color: #fff; 
+}
+
+/* Kontejner za sadržaj */
+.admin-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  /*background-color: rgba(0, 0, 0, 0.7); /* Tamna prozirna pozadina */
+  border-radius: 10px;
+}
+
+/* Naslovi */
+.admin-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color:white; 
+}
+
+/* Stil za obavijesti */
+.admin-notifications {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 0, 0.2); 
+  padding: 15px;
+  border-radius: 8px;
+  color:black;
+}
+
+.admin-notification-list li {
+  margin-bottom: 5px;
+}
+
+/* Kartice za rezervacije, probleme i vozila */
+.admin-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.admin-card {
+  background-color: rgba(135, 206, 235, 0.5); /* Boja "Sky Blue" s prozirnošću */
+  color:black;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  flex: 1 1 calc(33.333% - 20px); /* Svaka kartica zauzima 1/3 širine */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /*min-width: 250px; /* Minimalna širina kartice */
+  max-width: 300px; /* Maksimalna širina */
+  width: 100%; /* Širina prilagodljiva roditeljskom kontejneru */
+}
+
+/* Stil za dugmad unutar kartica */
+.admin-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.admin-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+}
+
+.accept-button {
+  background-color: #0044cc; 
+}
+
+.accept-button:hover {
+  background-color: #003399;
+}
+
+.reject-button {
+  background-color: #0044cc; 
+}
+
+.reject-button:hover {
+  background-color:  #003399;
+  
+}
+
+.delete-button {
+  background-color: #0044cc; 
+}
+
+.delete-button:hover {
+  background-color:  #003399;
+}
+
+.submit-button {
+  background-color: #0044cc; 
+}
+
+.submit-button:hover {
+  background-color: #003399;
+}
+
+/* Dropdown unutar kartica */
+.admin-select {
+  margin-top: 10px;
+}
+
+.admin-dropdown {
+  width: 100%;
+  padding: 10px;
+  border: 1px soli grey;
+  border-radius: 5px;
+  background-color:  rgba(135, 206, 235, 0.5);
+  color: #333;
+}
+
+/* Forma za dodavanje vozila */
+.admin-form {
+  margin-top: 20px;
+  /*background-color: rgba(255, 255, 255, 0.9); /* Bijela pozadina za formu */
+  background: none;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.admin-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
