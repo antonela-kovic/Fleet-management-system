@@ -31,7 +31,7 @@ Projekt/
 ├── employee.js            # Middleware za zaposlenike
 ├── package.json           # Ovisnosti i konfiguracije
 ├── node\_modules/          # Node moduli
-└── fleet-management-frontend/ # Frontend aplikacija (ako postoji)
+└── fleet-management-frontend/ # Frontend aplikacija
 
 ````
 
