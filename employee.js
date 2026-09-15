@@ -3,6 +3,8 @@ const Reservation = require('./Reservation');
 const Issue = require('./Issue');
 const router = express.Router();
 const mongoose = require('mongoose');
+const User = require('./User');
+const bcrypt = require('bcryptjs');
 
 // Kreiranje rezervacije
 router.post('/reservations', async (req, res) => {
@@ -164,6 +166,89 @@ router.post('/report-problem', async (req, res) => {
   } catch (error) {
     console.error('Greška prilikom prijave problema:', error);
     res.status(500).json({ message: 'Server greška prilikom prijave problema.' });
+  }
+});
+
+
+// ===== PROFIL ZAPOSLENIKA =====
+// Iste mogućnosti profila kao kod administratora: slika, promjena lozinke i brisanje profila.
+router.post('/profile-image', async (req, res) => {
+  const { email, image } = req.body;
+
+  if (!email || !image) {
+    return res.status(400).json({ message: 'Email i slika su obavezni.' });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { email, role: 'employee' },
+      { profileImage: image },
+      { new: true, upsert: false }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'Zaposlenik nije pronađen.' });
+    }
+
+    res.json({ message: 'Slika uspješno spremljena.' });
+  } catch (err) {
+    console.error('Greška prilikom spremanja slike zaposlenika:', err);
+    res.status(500).json({ message: 'Greška na serveru.' });
+  }
+});
+
+router.get('/profile-image/:email', async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email, role: 'employee' });
+
+    if (!user || !user.profileImage) {
+      return res.status(404).json({ message: 'Slika nije pronađena.' });
+    }
+
+    res.json({ image: user.profileImage });
+  } catch (err) {
+    console.error('Greška prilikom dohvaćanja slike zaposlenika:', err);
+    res.status(500).json({ message: 'Greška na serveru.' });
+  }
+});
+
+router.delete('/delete-profile/:email', async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ email: req.params.email, role: 'employee' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Zaposlenik nije pronađen.' });
+    }
+
+    res.status(200).json({ message: 'Profil uspješno obrisan.' });
+  } catch (error) {
+    console.error('Greška pri brisanju profila zaposlenika:', error);
+    res.status(500).json({ message: 'Došlo je do greške.' });
+  }
+});
+
+router.put('/change-password', async (req, res) => {
+  const { email, currentPassword, newPassword } = req.body;
+
+  if (!email || !currentPassword || !newPassword) {
+    return res.status(400).json({ message: 'Sva polja su obavezna.' });
+  }
+
+  try {
+    const user = await User.findOne({ email, role: 'employee' });
+    if (!user) return res.status(404).json({ message: 'Zaposlenik nije pronađen.' });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Trenutna lozinka nije točna.' });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json({ message: 'Lozinka uspješno promijenjena.' });
+  } catch (err) {
+    console.error('Greška pri promjeni lozinke zaposlenika:', err);
+    res.status(500).json({ message: 'Greška na serveru.' });
   }
 });
 

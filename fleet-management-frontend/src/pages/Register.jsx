@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../slike/digitalna-dalmacija-logo2.webp'; 
+import './Register.css';
+
 
 const Register = () => {
   const [formData, setFormData] = useState({

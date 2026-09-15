@@ -1,0 +1,1337 @@
+/*AdminDashBoard.css*/
+.admin-dashboard {
+  font-family: 'Inter', sans-serif;
+  color: #1f2d3d;
+  background-color: #f9fbfc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* osigurava širinu preko cijele stranice */
+
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+}
+
+.header-right button {
+  margin-left: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: row; /* osigurava vodoravni raspored */
+  align-items: center;
+  gap: 12px; /* razmak između ikona */
+}
+
+
+.admin-tabs {
+  display: flex;
+  gap: 40px;
+  padding: 10px 40px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+}
+
+.admin-tabs button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-tabs .active {
+  border-color: #1f2d3d;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+.placeholder {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  padding: 100px 0;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 60px 20px;
+  color: #333;
+}
+
+.placeholder-image {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.vozila-section {
+  padding: 20px;
+}
+
+.vozila-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.vozila-table th,
+.vozila-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+}
+
+.vozila-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  border: 1px solid #333;
+  background-color: white;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #f0f0f0;
+}
+
+
+/* Modal overlay (zatamnjenje pozadine) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal prozor */
+.modal {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Inputi unutar modala */
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Akcije u modalu */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #1f2d3d;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions button:hover {
+  background-color: #3a4a5a;
+}
+
+/* Statusi u tablici */
+.vozila-table td:last-child {
+  font-weight: bold;
+}
+
+.vozila-table td:last-child:contains("ZAUZET") {
+  color: #c0392b;
+}
+
+.vozila-table td:last-child:contains("SLOBODNO") {
+  color: #27ae60;
+}
+
+.status.zauzet {
+  color: red;
+  font-weight: bold;
+}
+
+.status.slobodno {
+  color: green;
+  font-weight: bold;
+}
+
+.rezervacije-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.rezervacije-table th,
+.rezervacije-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+}
+
+.biljeske-section {
+  padding: 20px 40px;
+}
+
+.biljeske-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.biljeske-header h3 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.biljeske-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.biljeska-kartica {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-left: 4px solid #1f2d3d;
+  border-radius: 8px;
+  padding: 16px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.biljeska-kartica p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.biljeska-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.biljeska-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #1f2d3d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.biljeska-actions button:hover {
+  background-color: #32475c;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #1f2d3d;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #33475b;
+}
+
+.btn-secondary {
+  background-color: #ffffff;
+  color: #1f2d3d;
+  border: 1px solid #1f2d3d;
+}
+
+.btn-secondary:hover {
+  background-color: #f0f0f0;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal h3 {
+  margin-bottom: 20px;
+}
+
+.modal input,
+.modal textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.modal textarea {
+  min-height: 60px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Kalendar */
+.kalendar-section {
+  padding: 0px 40px; /* povećano */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #f8f9fa;
+}
+
+.react-calendar {
+  width: 90vw; /* zauzmi 90% širine prozora */
+  max-width: none; /* ukloni ograničenje */
+  min-width: 500px; /* možeš dodati i minimalnu širinu za konzistentnost */
+  min-height: 420px; /* povećava vertikalni prostor */
+  background-color: #ffffff;
+  padding: 20px; /* povećano */
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 18px; /* dodano */
+  transition: box-shadow 0.3s ease;
+  
+}
+
+.react-calendar:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Navigacija */
+.react-calendar__navigation button {
+  font-weight: bold;
+  font-size: 18px; /* povećano */
+  color: #1f2d3d;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button:hover {
+  color: #33475b;
+}
+
+/* Dani u tjednu */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-size: 16px; /* povećano */
+  color: #444;
+  text-transform: uppercase;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+/* Pojedinačni dani */
+.react-calendar__tile {
+  padding: 20px 10px; /* povećano */
+  border-radius: 8px;
+  position: relative;
+  font-size: 16px; /* povećano */
+  transition: background-color 0.2s ease;
+}
+
+.react-calendar__tile:hover {
+  background-color: #f0f0f0;
+}
+
+/* Isticanje dana s događajima */
+.react-calendar__tile--has-biljeska::after {
+  content: '🟢';
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 14px;
+}
+
+.react-calendar__tile--has-rezervacija::after {
+  content: '🔵';
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 14px;
+}
+
+.react-calendar__tile--both-events::after {
+  content: '🟣';
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 14px;
+}
+
+/* Vremenska prognoza */
+.tile-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px; /* povećano */
+  margin-top: 4px;
+}
+
+/* Popup */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px 24px;
+  border-radius: 10px;
+  width: 320px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.popup-close:hover {
+  color: #1f2d3d;
+}
+
+.popup-content h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.popup-content p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.popup-content button {
+  margin-top: 15px;
+  padding: 8px 14px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.1s ease;
+}
+
+.popup-content button:hover {
+  background-color: rgb(190, 187, 187);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .react-calendar {
+    max-width: 100%;
+    padding: 20px; /* manje za mobitele */
+  }
+
+  .popup-content {
+    width: 90%;
+  }
+}
+
+.kalendar-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 0px;
+}
+
+
+.kalendar-section {
+  flex: 2;
+}
+
+.desna-strana {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+}
+
+.clock, .statistics, .legend {
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.clock-time {
+  font-size: 28px;
+  font-weight: bold;
+  font-family: monospace;
+  margin-top: 8px;
+}
+
+.legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.legend .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.dot.green { background: green; }
+.dot.blue { background: blue; }
+.dot.purple { background: purple; }
+
+
+.vozila-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.popup-close:hover {
+  color: #1f2d3d;
+}
+
+.modal {
+  position: relative; /* ovo je nužno za pozicioniranje X gumba */
+}
+/* dio za promjenu teme. */
+
+body.light-mode {
+  background-color: white;
+  color: black;
+}
+
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+/* dodatno stiliziraj kartice, tablice, inpute itd. */
+/* === DARK MODE STILOVI === */
+
+body.dark-mode .admin-dashboard,
+body.dark-mode .admin-content,
+body.dark-mode .kalendar-section,
+body.dark-mode .modal,
+body.dark-mode .popup-content,
+body.dark-mode .react-calendar,
+body.dark-mode .clock,
+body.dark-mode .statistics,
+body.dark-mode .legend,
+body.dark-mode .biljeska-kartica,
+body.dark-mode .profil-popup,
+body.dark-mode .notifikacije-popup {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+}
+
+body.dark-mode .admin-tabs button {
+  color: #f0f0f0;
+}
+
+body.dark-mode .admin-tabs .active {
+  border-color: #f0f0f0;
+}
+
+body.dark-mode .react-calendar__navigation button {
+  color: #f0f0f0;
+}
+
+body.dark-mode .react-calendar__tile {
+  color: #f0f0f0;
+}
+
+body.dark-mode .react-calendar__tile:hover {
+  background-color: #444;
+}
+
+body.dark-mode .popup-close {
+  color: #ccc;
+}
+
+body.dark-mode .popup-close:hover {
+  color: white;
+}
+
+body.dark-mode .modal input,
+body.dark-mode .modal textarea {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+  border: 1px solid #666;
+}
+
+body.dark-mode .btn-primary {
+  background-color: #444;
+  color: #f0f0f0;
+}
+
+body.dark-mode .btn-primary:hover {
+  background-color: #555;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: transparent;
+  color: #f0f0f0;
+  border: 1px solid #aaa;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background-color: #3a3a3a;
+}
+
+body.dark-mode .vozila-table th,
+body.dark-mode .vozila-table td,
+body.dark-mode .rezervacije-table th,
+body.dark-mode .rezervacije-table td {
+  border: 1px solid #555;
+}
+
+body.dark-mode .admin-footer {
+  background-color: #2c2c2c;
+  color: #ccc;
+}
+
+body.dark-mode .biljeska-actions button {
+  background-color: #444;
+}
+
+body.dark-mode .biljeska-actions button:hover {
+  background-color: #666;
+}
+
+
+/* === OBAVIJESTI STILOVI === */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-button {
+  position: relative;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.notifikacije-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  width: 300px;
+}
+
+.notifikacije-popup ul {
+  padding-left: 16px;
+}
+
+body.dark-mode .notifikacije-popup {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+}
+
+/* === PROFIL STILOVI === */
+
+.profil-popup {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 240px;
+}
+
+body.dark-mode .profil-popup {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+}
+
+.profil-popup .btn-primary {
+   color: black;
+}
+
+/* === PROFIL POPUP === */
+/* Glavni popup s profilom */
+.profil-popup {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  width: 200px;
+  z-index: 1000;
+  text-align: left; /* 👈 Poravnanje lijevo */
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profil-popup p {
+  margin: 5px 0;
+}
+
+.profil-popup button {
+  display: block;
+  width: 100%;
+  text-align: left; /* 👈 Poravnanje gumba lijevo */
+  margin-bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 14px;
+  padding: 5px 0;
+  color: black;
+}
+
+.profil-popup button:hover {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+/* Dropdown za jezik */
+.language-dropdown {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.language-dropdown button {
+  padding: 3px 8px;
+  font-size: 12px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  /*width: fit-content; /* ⬅️ OVO JE KLJUČNO */
+  width:88px
+}
+
+
+/* Modal za lozinku */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: left;
+  position: relative;
+}
+
+.modal input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: none;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Slidebar s postavkama */
+.settings-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 1500;
+  overflow-y: auto;
+  text-align: left;
+}
+
+
+
+.settings-sidebar h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1f2d3d; /* osiguraj vidljiv tekst */
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background-color: #f9f9f9; /* blaga pozadina za vidljivost */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.settings-sidebar h3:hover {
+  background-color: #e0e0e0;
+}
+
+
+
+
+.settings-sidebar p {
+  margin: 10px 0;
+}
+
+.settings-sidebar button {
+  display: block;
+  text-align: left;
+  background: none;
+  border: none;
+  color: black;
+  padding: 4px 0;
+  margin: 6px 0;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  font-weight: bold;
+  width: 100%; /* osigurava poravnanje s ostatkom */
+}
+
+.popup-close {
+  position: relative;
+  text-align: left; /* 👈 Poravnanje gumba lijevo */
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.popup-close:hover {
+  color: #1f2d3d;
+}
+
+
+
+/* ==========================================================
+   ZAVRŠNO DOTJERIVANJE PROFILA / POSTAVKI I MODALA ZA VOZILO
+   Ova pravila su namjerno na kraju datoteke kako bi nadjačala
+   starije duplikate bez promjene ostatka administratorskog UI-ja.
+   ========================================================== */
+
+/* Profilni izbornik u gornjem desnom kutu */
+.profil-popup {
+  top: 54px;
+  right: 0;
+  width: 250px;
+  padding: 20px;
+  border: 1px solid #e1e6eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(31, 45, 61, 0.16);
+  text-align: left;
+}
+
+.profil-popup .popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #65717d;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.profil-popup .popup-close:hover {
+  color: #1f2d3d;
+  background: #eef2f5;
+}
+
+.profil-popup p {
+  margin: 4px 0;
+  padding-right: 34px;
+}
+
+.profil-popup p strong {
+  color: #1f2d3d;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.profil-popup button:not(.popup-close) {
+  width: 100%;
+  margin: 5px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.profil-popup .btn-secondary {
+  background: transparent;
+  color: #1f2d3d;
+  border: 1px solid transparent;
+}
+
+.profil-popup .btn-secondary:hover {
+  background: #f4f7f9;
+  border-color: #e4e9ed;
+}
+
+.profil-popup .btn-primary {
+  margin-top: 9px;
+  background: #1f2d3d;
+  color: #ffffff;
+  border: 1px solid #1f2d3d;
+  text-align: center;
+}
+
+.profil-popup .btn-primary:hover {
+  background: #33475b;
+  color: #ffffff;
+}
+
+/* Bočna traka postavki */
+.settings-sidebar {
+  width: 340px;
+  padding: 24px 26px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-left: 1px solid #e1e6eb;
+  box-shadow: -12px 0 32px rgba(31, 45, 61, 0.14);
+  color: #1f2d3d;
+}
+
+.settings-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e6ebef;
+}
+
+.settings-sidebar .settings-sidebar-header h3 {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #1f2d3d;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.settings-sidebar .settings-sidebar-header h3:hover {
+  background: transparent;
+}
+
+.settings-sidebar .settings-close {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #f1f4f6;
+  color: #5d6873;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.settings-sidebar .settings-close:hover {
+  background: #e4e9ed;
+  color: #1f2d3d;
+}
+
+.settings-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 24px;
+}
+
+.settings-avatar,
+.settings-avatar-placeholder {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #dfe5ea, 0 8px 20px rgba(31, 45, 61, 0.12);
+}
+
+.settings-avatar {
+  object-fit: cover;
+}
+
+.settings-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: #eef2f5;
+  color: #7b8793;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settings-details {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+
+.settings-sidebar .settings-details p {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #e5eaee;
+  border-radius: 8px;
+  background: #f8fafb;
+}
+
+.settings-sidebar .settings-details strong {
+  color: #66727e;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.settings-sidebar .settings-details span {
+  color: #1f2d3d;
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.settings-upload-label {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 4px;
+  padding: 11px 14px;
+  border: 1px solid #1f2d3d;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2d3d;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.settings-upload-label:hover {
+  background: #f2f5f7;
+}
+
+.settings-sidebar .settings-delete-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px 14px;
+  border: 1px solid #d6a3a0;
+  border-radius: 8px;
+  background: #fff7f6;
+  color: #a52a24;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.settings-sidebar .settings-delete-btn:hover {
+  background: #fdeceb;
+  border-color: #c97c77;
+}
+
+/* Gumb "Dodaj" u modalu vozila - jak kontrast teksta i pozadine */
+.vozila-section .modal-actions button {
+  min-width: 96px;
+  padding: 10px 18px;
+  background: #1f2d3d;
+  color: #ffffff !important;
+  border: 1px solid #1f2d3d;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.vozila-section .modal-actions button:hover {
+  background: #33475b;
+  color: #ffffff !important;
+}
+
+/* Dark mode za novi profil / postavke */
+body.dark-mode .profil-popup {
+  background: #2c2c2c;
+  color: #f0f0f0;
+  border-color: #4b4b4b;
+}
+
+body.dark-mode .profil-popup p strong,
+body.dark-mode .profil-popup .btn-secondary {
+  color: #f0f0f0;
+}
+
+body.dark-mode .profil-popup .btn-secondary:hover {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+body.dark-mode .settings-sidebar {
+  background: #2c2c2c;
+  color: #f0f0f0;
+  border-left-color: #4b4b4b;
+}
+
+body.dark-mode .settings-sidebar-header {
+  border-bottom-color: #4b4b4b;
+}
+
+body.dark-mode .settings-sidebar .settings-sidebar-header h3,
+body.dark-mode .settings-sidebar .settings-details span {
+  color: #f0f0f0;
+}
+
+body.dark-mode .settings-sidebar .settings-details p {
+  background: #343434;
+  border-color: #505050;
+}
+
+body.dark-mode .settings-sidebar .settings-details strong {
+  color: #b9c0c7;
+}
+
+body.dark-mode .settings-sidebar .settings-close {
+  background: #3b3b3b;
+  color: #d7d7d7;
+}
+
+body.dark-mode .settings-sidebar .settings-close:hover {
+  background: #4a4a4a;
+  color: #ffffff;
+}
+
+body.dark-mode .settings-avatar,
+body.dark-mode .settings-avatar-placeholder {
+  border-color: #2c2c2c;
+  box-shadow: 0 0 0 2px #5b5b5b, 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode .settings-avatar-placeholder {
+  background: #3a3a3a;
+  color: #c4c4c4;
+}
+
+body.dark-mode .settings-upload-label {
+  background: transparent;
+  color: #f0f0f0;
+  border-color: #aaa;
+}
+
+body.dark-mode .settings-upload-label:hover {
+  background: #3a3a3a;
+}
+
+body.dark-mode .settings-sidebar .settings-delete-btn {
+  background: #402b2a;
+  color: #ffb9b5;
+  border-color: #744744;
+}
+
+body.dark-mode .settings-sidebar .settings-delete-btn:hover {
+  background: #50302f;
+}

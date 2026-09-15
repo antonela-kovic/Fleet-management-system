@@ -1,0 +1,98 @@
+/* Register.css */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* centriranje po visini */
+  align-items: center;        /* centriranje po širini */
+  max-width: 900px;
+  background-color: white;
+  border-radius: 12px;        /* zaobljeni rubovi */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* lagani shadow */
+  padding: 30px;              /* prostor unutar forme */
+  margin: 40px auto;          /* razmak odozgo i centriranje */
+  border: 1px solid white;
+  
+}
+
+.login-form {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form img {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-form form {
+  width: 100%;
+  max-width: 300px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: white;
+  appearance: none;
+}
+
+.form-select:hover {
+  border-color: #0044cc;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.login-form button:hover {
+  background-color: #003399;
+}
+
+.login-form .register-link,
+.register-link {
+  text-align: center;
+  margin-top: 10px;
+  color: #0044cc;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login-image {
+  flex: 1;
+  min-width: 400px;
+  background-image: url('/Projekt/fleet-management-frontend/public/Slika_vozila.webp');
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+}

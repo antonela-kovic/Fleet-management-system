@@ -62,7 +62,11 @@ router.post('/login', async (req, res, next) => {
     return res.status(200).json({ 
       token, 
       userId: user._id, 
-      role: user.role 
+      role: user.role,
+      name: user.name, // dodano ime
+      email: user.email // dodano!
+
+
     });
   } catch (error) {
     console.error('Greška prilikom prijave:', error);

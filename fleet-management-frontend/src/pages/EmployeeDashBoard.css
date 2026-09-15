@@ -1,0 +1,791 @@
+/* EmployeeDashBoard.css
+   Svi stilovi su namjerno scoped/prefiksirani s employee- kako ne bi utjecali
+   na postojeći administratorski dio aplikacije. */
+
+.employee-dashboard {
+  --employee-bg: #f9fbfc;
+  --employee-surface: #ffffff;
+  --employee-surface-soft: #f4f7f9;
+  --employee-text: #1f2d3d;
+  --employee-muted: #6b7785;
+  --employee-border: #d9e0e5;
+  --employee-primary: #1f2d3d;
+  --employee-primary-hover: #33475b;
+  --employee-accent: #0399c4;
+  --employee-danger: #b93838;
+  --employee-success: #167b45;
+  --employee-warning: #9b6b00;
+
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--employee-text);
+  background: var(--employee-bg);
+}
+
+.employee-dashboard.employee-dark {
+  --employee-bg: #181b1f;
+  --employee-surface: #23272c;
+  --employee-surface-soft: #2b3036;
+  --employee-text: #f0f3f5;
+  --employee-muted: #aeb7c0;
+  --employee-border: #414850;
+  --employee-primary: #f0f3f5;
+  --employee-primary-hover: #d7dde1;
+}
+
+.employee-dashboard button,
+.employee-dashboard input,
+.employee-dashboard textarea {
+  font: inherit;
+}
+
+.employee-header {
+  width: 100%;
+  min-height: 82px;
+  padding: 18px 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--employee-bg);
+}
+
+.employee-header-left,
+.employee-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.employee-header-left {
+  gap: 14px;
+}
+
+.employee-header-left h2 {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.2;
+  color: var(--employee-text);
+}
+
+.employee-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.employee-header-right {
+  gap: 12px;
+}
+
+.employee-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--employee-text);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.employee-icon-btn:hover {
+  background: var(--employee-surface-soft);
+}
+
+.employee-profile-icon {
+  font-size: 21px;
+}
+
+.employee-profile-wrapper {
+  position: relative;
+}
+
+.employee-profile-popup {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 230px;
+  z-index: 1200;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+
+.employee-profile-popup strong {
+  font-size: 17px;
+}
+
+.employee-profile-popup span {
+  color: var(--employee-muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.employee-profile-popup button {
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--employee-border);
+  border-radius: 6px;
+  background: var(--employee-surface);
+  color: var(--employee-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.employee-tabs {
+  width: 100%;
+  padding: 8px 44px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 38px;
+  border-bottom: 1px solid var(--employee-border);
+  background: var(--employee-bg);
+}
+
+.employee-tabs button {
+  padding: 8px 0 6px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--employee-text);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.employee-tabs button.active {
+  border-bottom-color: var(--employee-text);
+}
+
+.employee-content {
+  flex: 1;
+  width: 100%;
+  padding: 44px;
+}
+
+.employee-section,
+.employee-overview {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.employee-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
+.employee-section-heading h2 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
+
+.employee-section-heading p {
+  margin: 0;
+  color: var(--employee-muted);
+}
+
+.employee-btn {
+  min-height: 40px;
+  padding: 9px 16px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.employee-btn:hover {
+  transform: translateY(-1px);
+}
+
+.employee-btn-primary {
+  color: #ffffff;
+  background: #1f2d3d;
+  border-color: #1f2d3d;
+}
+
+.employee-dark .employee-btn-primary {
+  color: #1f2d3d;
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.employee-btn-primary:hover {
+  background: #33475b;
+  border-color: #33475b;
+}
+
+.employee-dark .employee-btn-primary:hover {
+  background: #dfe5e9;
+  border-color: #dfe5e9;
+}
+
+.employee-btn-secondary {
+  color: var(--employee-text);
+  background: var(--employee-surface);
+  border-color: var(--employee-text);
+}
+
+.employee-btn-secondary:hover {
+  background: var(--employee-surface-soft);
+}
+
+.employee-btn-danger-outline {
+  color: var(--employee-danger);
+  background: transparent;
+  border-color: #d8a7a7;
+}
+
+.employee-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+  gap: 34px;
+  align-items: stretch;
+}
+
+.employee-welcome-copy,
+.employee-welcome-image {
+  min-height: 390px;
+  border-radius: 16px;
+}
+
+.employee-welcome-copy {
+  padding: 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+}
+
+.employee-eyebrow {
+  margin-bottom: 12px;
+  color: var(--employee-accent);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+}
+
+.employee-welcome-copy h1 {
+  margin: 0 0 16px;
+  font-size: clamp(34px, 4vw, 54px);
+  line-height: 1.05;
+}
+
+.employee-welcome-copy p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--employee-muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.employee-welcome-actions {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.employee-welcome-image {
+  background:
+    linear-gradient(180deg, rgba(31, 45, 61, 0.04), rgba(31, 45, 61, 0.18)),
+    url('/employee_poz1.jpg') center / cover no-repeat;
+  border: 1px solid var(--employee-border);
+}
+
+.employee-summary-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.employee-summary-card,
+.employee-info-card,
+.employee-problem-card {
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(31, 45, 61, 0.05);
+}
+
+.employee-summary-card {
+  padding: 22px;
+  display: grid;
+  gap: 5px;
+}
+
+.employee-summary-card span,
+.employee-card-label {
+  color: var(--employee-muted);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.employee-summary-card strong {
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.employee-summary-card small {
+  color: var(--employee-muted);
+}
+
+.employee-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+  border-radius: 10px;
+}
+
+.employee-reservations-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.employee-reservations-table th,
+.employee-reservations-table td {
+  padding: 15px 14px;
+  border-bottom: 1px solid var(--employee-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.employee-reservations-table th {
+  background: var(--employee-surface-soft);
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.employee-reservations-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.employee-empty-cell {
+  padding: 36px !important;
+  text-align: center !important;
+  color: var(--employee-muted);
+}
+
+.employee-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.employee-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.employee-status-success {
+  color: #0f6b3a;
+  background: #e9f8f0;
+}
+
+.employee-status-danger {
+  color: #9d2f2f;
+  background: #fdeeee;
+}
+
+.employee-status-pending {
+  color: #805d00;
+  background: #fff6d9;
+}
+
+.employee-status-muted {
+  color: #5e6975;
+  background: #edf0f2;
+}
+
+.employee-dark .employee-status-success,
+.employee-dark .employee-status-danger,
+.employee-dark .employee-status-pending,
+.employee-dark .employee-status-muted {
+  color: #f4f6f7;
+  background: #3a4047;
+}
+
+.employee-loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--employee-muted);
+}
+
+.employee-form-section {
+  max-width: 1100px;
+}
+
+.employee-reservation-form {
+  padding: 28px;
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+  border-radius: 12px;
+}
+
+.employee-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.employee-form-grid label,
+.employee-modal-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--employee-text);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.employee-form-grid input,
+.employee-form-grid textarea,
+.employee-modal-label textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--employee-border);
+  border-radius: 7px;
+  background: var(--employee-surface);
+  color: var(--employee-text);
+  outline: none;
+}
+
+.employee-form-grid input:focus,
+.employee-form-grid textarea:focus,
+.employee-modal-label textarea:focus {
+  border-color: #7d8b97;
+  box-shadow: 0 0 0 3px rgba(31, 45, 61, 0.08);
+}
+
+.employee-form-purpose {
+  grid-column: 1 / -1;
+}
+
+.employee-form-purpose textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.employee-form-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.employee-problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.employee-problem-card {
+  min-height: 175px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.employee-problem-card h3 {
+  margin: 7px 0;
+}
+
+.employee-problem-card p {
+  margin: 0;
+  color: var(--employee-muted);
+}
+
+.employee-empty-state {
+  grid-column: 1 / -1;
+  min-height: 190px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  background: var(--employee-surface);
+  border: 1px dashed var(--employee-border);
+  border-radius: 12px;
+}
+
+.employee-empty-state span {
+  color: var(--employee-muted);
+}
+
+.employee-calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(520px, 1.4fr) minmax(300px, 0.6fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.employee-calendar-card {
+  padding: 22px;
+  background: var(--employee-surface);
+  border: 1px solid var(--employee-border);
+  border-radius: 12px;
+}
+
+.employee-dashboard .react-calendar {
+  width: 100%;
+  max-width: none;
+  border: 0;
+  background: transparent;
+  color: var(--employee-text);
+  font-family: inherit;
+}
+
+.employee-dashboard .react-calendar__navigation button,
+.employee-dashboard .react-calendar__tile {
+  color: var(--employee-text);
+  background: transparent;
+}
+
+.employee-dashboard .react-calendar__navigation button:enabled:hover,
+.employee-dashboard .react-calendar__navigation button:enabled:focus,
+.employee-dashboard .react-calendar__tile:enabled:hover,
+.employee-dashboard .react-calendar__tile:enabled:focus {
+  background: var(--employee-surface-soft);
+}
+
+.employee-dashboard .react-calendar__tile--now {
+  background: #fff36a;
+  color: #20252a;
+  border-radius: 8px;
+}
+
+.employee-dashboard .react-calendar__tile--active {
+  background: #1f2d3d;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.employee-dashboard .employee-has-reservation:not(.react-calendar__tile--active) {
+  position: relative;
+  font-weight: 850;
+}
+
+.employee-dashboard .employee-has-reservation:not(.react-calendar__tile--active)::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #1c45df;
+}
+
+.employee-calendar-sidebar {
+  display: grid;
+  gap: 18px;
+}
+
+.employee-info-card {
+  padding: 20px;
+}
+
+.employee-info-card h3 {
+  margin: 7px 0 0;
+  font-size: 24px;
+}
+
+.employee-info-card p {
+  margin: 9px 0 0;
+  color: var(--employee-muted);
+}
+
+.employee-calendar-item {
+  margin-top: 12px;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--employee-border);
+}
+
+.employee-calendar-item span {
+  color: var(--employee-muted);
+  text-align: right;
+}
+
+.employee-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #1c45df;
+}
+
+.employee-footer {
+  width: 100%;
+  padding: 24px;
+  text-align: center;
+  line-height: 1.45;
+  background: var(--employee-surface-soft);
+  border-top: 1px solid var(--employee-border);
+}
+
+.employee-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.employee-modal {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 28px;
+  background: var(--employee-surface);
+  color: var(--employee-text);
+  border: 1px solid var(--employee-border);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+}
+
+.employee-modal h3 {
+  margin: 0 34px 8px 0;
+  font-size: 23px;
+}
+
+.employee-modal-subtitle {
+  margin: 0 0 20px;
+  color: var(--employee-muted);
+}
+
+.employee-modal-label textarea {
+  min-height: 135px;
+  resize: vertical;
+}
+
+.employee-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--employee-muted);
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.employee-modal-close:hover {
+  background: var(--employee-surface-soft);
+  color: var(--employee-text);
+}
+
+.employee-modal-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.employee-message-modal p {
+  color: var(--employee-muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 1050px) {
+  .employee-overview,
+  .employee-calendar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-welcome-image {
+    min-height: 320px;
+  }
+
+  .employee-form-grid,
+  .employee-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .employee-header,
+  .employee-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .employee-header-left h2 {
+    font-size: 21px;
+  }
+
+  .employee-tabs {
+    gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .employee-tabs button {
+    font-size: 14px;
+  }
+
+  .employee-welcome-copy {
+    min-height: auto;
+    padding: 30px;
+  }
+
+  .employee-welcome-copy h1 {
+    font-size: 36px;
+  }
+
+  .employee-section-heading {
+    flex-direction: column;
+  }
+
+  .employee-calendar-card {
+    padding: 10px;
+  }
+
+  .employee-form-actions,
+  .employee-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .employee-form-actions .employee-btn,
+  .employee-modal-actions .employee-btn {
+    width: 100%;
+  }
+}
