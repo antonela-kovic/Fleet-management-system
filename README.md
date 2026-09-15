@@ -419,4 +419,3 @@ Projekt koristi nekoliko osnovnih sigurnosnih mehanizama:
 
 
 
-Projekt izrađen kao završni projekt za razvoj full-stack web aplikacije za upravljanje voznim parkom.
