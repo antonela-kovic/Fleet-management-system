@@ -303,7 +303,7 @@ MONGO_URI=mongodb://localhost:27017/fleet_management
 JWT_SECRET=vas_tajni_jwt_kljuc
 ```
 
-> `.env` datoteka s pravim pristupnim podacima i tajnim ključevima ne smije se spremati na GitHub.
+
 
 ---
 
