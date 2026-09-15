@@ -2,8 +2,8 @@ import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types'; // Dodan PropTypes za validaciju
 
 const PrivateRoute = ({ children, role }) => {
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('role');
+  const token = sessionStorage.getItem('token');
+  const userRole = sessionStorage.getItem('role');
 
   // Provjerava je li korisnik prijavljen i ima li odgovarajuću ulogu
   if (!token || (role && userRole !== role)) {

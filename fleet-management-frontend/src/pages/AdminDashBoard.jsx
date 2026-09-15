@@ -73,8 +73,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const adminName = localStorage.getItem('name') || 'Administrator';
-  const adminEmail = localStorage.getItem('email') || 'N/A';
+  const adminName = sessionStorage.getItem('name') || 'Administrator';
+  const adminEmail = sessionStorage.getItem('email') || 'N/A';
   const [vozila, setVozila] = useState([]);
   const [novoVozilo, setNovoVozilo] = useState({
     registracija: '',
@@ -438,9 +438,12 @@ const AdminDashboard = () => {
 
   // Profil
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('name');
+    sessionStorage.removeItem('email');
+    
     window.location.href = '/login'; // ili navigate('/login') ako koristiš react-router
   };
 

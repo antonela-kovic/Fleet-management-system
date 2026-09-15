@@ -38,11 +38,11 @@ const Login = () => {
 
     const { token, userId, role, name } = response.data;
     if (token && userId && role && name) {
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('role', role);
-      localStorage.setItem('name', name);
-      localStorage.setItem('email', email);
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('userId', userId);
+      sessionStorage.setItem('role', role);
+      sessionStorage.setItem('name', name);
+      sessionStorage.setItem('email', email);
 
 
       if (role === 'employee') {

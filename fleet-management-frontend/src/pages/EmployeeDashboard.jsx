@@ -30,9 +30,9 @@ const formatDate = (value) => {
 };
 
 const EmployeeDashboard = () => {
-  const userId = localStorage.getItem('userId');
-  const employeeName = localStorage.getItem('name') || 'zaposleniče';
-  const employeeEmail = localStorage.getItem('email') || '';
+  const userId = sessionStorage.getItem('userId');
+  const employeeName = sessionStorage.getItem('name') || 'zaposleniče';
+  const employeeEmail = sessionStorage.getItem('email') || '';
 
   const [activeTab, setActiveTab] = useState('pregled');
   const [darkMode, setDarkMode] = useState(false);
@@ -166,11 +166,11 @@ const EmployeeDashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('role');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('name');
+    sessionStorage.removeItem('email');
     window.location.href = '/';
   };
 
