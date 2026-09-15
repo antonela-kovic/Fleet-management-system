@@ -417,21 +417,6 @@ Projekt koristi nekoliko osnovnih sigurnosnih mehanizama:
 
 ---
 
-# Buduća poboljšanja
 
-Projekt se može dodatno proširiti funkcionalnostima kao što su:
-
-- napredni filteri rezervacija po vozilu
-- automatski podsjetnici za registraciju i tehnički pregled
-- e-mail obavijesti
-- detaljnija evidencija servisa vozila
-- napredna statistika korištenja vozila
-- izvještaji o troškovima
-- povijest izmjena vozila
-- deployment aplikacije na cloud platformu
-
----
-
-# Autor
 
 Projekt izrađen kao završni projekt za razvoj full-stack web aplikacije za upravljanje voznim parkom.
