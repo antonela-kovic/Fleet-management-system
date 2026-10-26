@@ -1,61 +1,28 @@
-// --- Backend: Main Application Entry ---
-const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Samo 1 smije biti deklarirano !!!!
-const jwt = require('jsonwebtoken');
-const app = express();
 
-// Load environment varijable
 dotenv.config();
 
-// Middleware
-app.use(cors({
- origin: 'http://localhost:5173',
- credentials: true,
-}));
-//app.use(express.json());
-app.use(express.json({ limit: '5mb' }));
-app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+const app = require('./app');
+const { expireFinishedReservations } = require('./services/reservations');
 
+if (!process.env.MONGO_URI || !process.env.JWT_SECRET) {
+  console.error('MONGO_URI and JWT_SECRET must be set (see .env.example).');
+  process.exit(1);
+}
 
-// Korištenje MONGO_URI iz .env
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('Error connecting to MongoDB:', err));
-
-
-
-// Routes import
-const authRoutes = require('./auth');
-const employeeRoutes = require('./employee');
-const adminRoutes = require('./admin');
-
-// Use routes
-app.use('/api/auth', authRoutes);
-app.use('/api/employee', employeeRoutes);
-app.use('/api/admin', adminRoutes);
-
-// Unified Error Handling Middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
-});
-
-
-// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-
-//Deploy
-const path = require('path');
-
-// Posluživanje statičkih datoteka iz dist direktorija
-app.use(express.static(path.join(__dirname, 'fleet-management-frontend/dist')));
-
-// Sve ostale rute vraćaju index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'fleet-management-frontend', 'dist', 'index.html'));
-});
-
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    // Expire finished reservations on start and then every hour
+    expireFinishedReservations().catch(console.error);
+    setInterval(() => expireFinishedReservations().catch(console.error), 60 * 60 * 1000);
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err.message);
+    process.exit(1);
+  });

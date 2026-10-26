@@ -1,14 +1,15 @@
 {
-  "name": "projekt",
+  "name": "fleet-management-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Fleet management web app: vehicle reservations, assignment and issue reporting (Express + MongoDB backend)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "create-admin": "node scripts/createAdmin.js",
+    "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Antonela Ković",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -19,6 +20,8 @@
     "mongoose": "^8.9.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.3.1"
   }
 }

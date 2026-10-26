@@ -6,7 +6,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 100%; /* osigurava širinu preko cijele stranice */
+  width: 100%;
 
 }
 
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: row; /* osigurava vodoravni raspored */
   align-items: center;
-  gap: 12px; /* razmak između ikona */
+  gap: 12px;
 }
 
 
@@ -102,24 +102,24 @@
   margin-bottom: 20px;
 }
 
-.vozila-section {
+.vehicles-section {
   padding: 20px;
 }
 
-.vozila-table {
+.vehicles-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-.vozila-table th,
-.vozila-table td {
+.vehicles-table th,
+.vehicles-table td {
   border: 1px solid #ccc;
   padding: 12px;
   text-align: center;
 }
 
-.vozila-buttons {
+.vehicles-buttons {
   display: flex;
   gap: 15px;
   justify-content: center;
@@ -141,7 +141,7 @@
 }
 
 
-/* Modal overlay (zatamnjenje pozadine) */
+/* Modal overlay (dims the background) */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -155,7 +155,7 @@
   z-index: 1000;
 }
 
-/* Modal prozor */
+/* Modal window */
 .modal {
   background: white;
   padding: 30px 40px;
@@ -198,15 +198,15 @@
 }
 
 /* Statusi u tablici */
-.vozila-table td:last-child {
+.vehicles-table td:last-child {
   font-weight: bold;
 }
 
-.vozila-table td:last-child:contains("ZAUZET") {
+.vehicles-table td:last-child:contains("ZAUZET") {
   color: #c0392b;
 }
 
-.vozila-table td:last-child:contains("SLOBODNO") {
+.vehicles-table td:last-child:contains("SLOBODNO") {
   color: #27ae60;
 }
 
@@ -220,42 +220,42 @@
   font-weight: bold;
 }
 
-.rezervacije-table {
+.reservations-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-.rezervacije-table th,
-.rezervacije-table td {
+.reservations-table th,
+.reservations-table td {
   border: 1px solid #ccc;
   padding: 12px;
   text-align: center;
 }
 
-.biljeske-section {
+.notes-section {
   padding: 20px 40px;
 }
 
-.biljeske-header {
+.notes-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.biljeske-header h3 {
+.notes-header h3 {
   font-size: 24px;
   font-weight: bold;
 }
 
-.biljeske-lista {
+.notes-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.biljeska-kartica {
+.note-card {
   background-color: #fff;
   border: 1px solid #ccc;
   border-left: 4px solid #1f2d3d;
@@ -268,19 +268,19 @@
   justify-content: space-between;
 }
 
-.biljeska-kartica p {
+.note-card p {
   margin: 8px 0;
   font-size: 14px;
 }
 
-.biljeska-actions {
+.note-actions {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   margin-top: 10px;
 }
 
-.biljeska-actions button {
+.note-actions button {
   padding: 6px 12px;
   font-size: 14px;
   background-color: #1f2d3d;
@@ -290,7 +290,7 @@
   cursor: pointer;
 }
 
-.biljeska-actions button:hover {
+.note-actions button:hover {
   background-color: #32475c;
 }
 
@@ -373,8 +373,8 @@
 }
 
 /* Kalendar */
-.kalendar-section {
-  padding: 0px 40px; /* povećano */
+.calendar-section {
+  padding: 0px 40px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -382,18 +382,18 @@
 }
 
 .react-calendar {
-  width: 90vw; /* zauzmi 90% širine prozora */
-  max-width: none; /* ukloni ograničenje */
-  min-width: 500px; /* možeš dodati i minimalnu širinu za konzistentnost */
-  min-height: 420px; /* povećava vertikalni prostor */
+  width: 90vw;
+  max-width: none;
+  min-width: 500px;
+  min-height: 420px;
   background-color: #ffffff;
-  padding: 20px; /* povećano */
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
   font-size: 18px; /* dodano */
   transition: box-shadow 0.3s ease;
-  
+
 }
 
 .react-calendar:hover {
@@ -403,7 +403,7 @@
 /* Navigacija */
 .react-calendar__navigation button {
   font-weight: bold;
-  font-size: 18px; /* povećano */
+  font-size: 18px;
   color: #1f2d3d;
   background: none;
   border: none;
@@ -417,7 +417,7 @@
 /* Dani u tjednu */
 .react-calendar__month-view__weekdays {
   text-align: center;
-  font-size: 16px; /* povećano */
+  font-size: 16px;
   color: #444;
   text-transform: uppercase;
 }
@@ -427,12 +427,12 @@
   font-weight: 500;
 }
 
-/* Pojedinačni dani */
+/* Individual days */
 .react-calendar__tile {
-  padding: 20px 10px; /* povećano */
+  padding: 20px 10px;
   border-radius: 8px;
   position: relative;
-  font-size: 16px; /* povećano */
+  font-size: 16px;
   transition: background-color 0.2s ease;
 }
 
@@ -440,8 +440,8 @@
   background-color: #f0f0f0;
 }
 
-/* Isticanje dana s događajima */
-.react-calendar__tile--has-biljeska::after {
+/* Highlight days with events */
+.react-calendar__tile.has-note::after {
   content: '🟢';
   position: absolute;
   bottom: 4px;
@@ -449,7 +449,7 @@
   font-size: 14px;
 }
 
-.react-calendar__tile--has-rezervacija::after {
+.react-calendar__tile.has-reservation::after {
   content: '🔵';
   position: absolute;
   bottom: 4px;
@@ -457,7 +457,7 @@
   font-size: 14px;
 }
 
-.react-calendar__tile--both-events::after {
+.react-calendar__tile.both-events::after {
   content: '🟣';
   position: absolute;
   bottom: 4px;
@@ -470,7 +470,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 14px; /* povećano */
+  font-size: 14px;
   margin-top: 4px;
 }
 
@@ -541,7 +541,7 @@
 @media (max-width: 600px) {
   .react-calendar {
     max-width: 100%;
-    padding: 20px; /* manje za mobitele */
+    padding: 20px; /* smaller on mobile */
   }
 
   .popup-content {
@@ -549,7 +549,7 @@
   }
 }
 
-.kalendar-wrapper {
+.calendar-wrapper {
   display: flex;
   gap: 12px;
   align-items: flex-start;
@@ -557,16 +557,16 @@
 }
 
 
-.kalendar-section {
+.calendar-section {
   flex: 2;
 }
 
-.desna-strana {
+.calendar-sidebar {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  
+
 }
 
 .clock, .statistics, .legend {
@@ -608,7 +608,7 @@
 .dot.purple { background: purple; }
 
 
-.vozila-header {
+.vehicles-header {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
@@ -631,9 +631,9 @@
 }
 
 .modal {
-  position: relative; /* ovo je nužno za pozicioniranje X gumba */
+  position: relative; /* needed to position the close button */
 }
-/* dio za promjenu teme. */
+/* Theme switching */
 
 body.light-mode {
   background-color: white;
@@ -650,16 +650,16 @@ body.dark-mode {
 
 body.dark-mode .admin-dashboard,
 body.dark-mode .admin-content,
-body.dark-mode .kalendar-section,
+body.dark-mode .calendar-section,
 body.dark-mode .modal,
 body.dark-mode .popup-content,
 body.dark-mode .react-calendar,
 body.dark-mode .clock,
 body.dark-mode .statistics,
 body.dark-mode .legend,
-body.dark-mode .biljeska-kartica,
-body.dark-mode .profil-popup,
-body.dark-mode .notifikacije-popup {
+body.dark-mode .note-card,
+body.dark-mode .profile-popup,
+body.dark-mode .notifications-popup {
   background-color: #2c2c2c;
   color: #f0f0f0;
 }
@@ -718,10 +718,10 @@ body.dark-mode .btn-secondary:hover {
   background-color: #3a3a3a;
 }
 
-body.dark-mode .vozila-table th,
-body.dark-mode .vozila-table td,
-body.dark-mode .rezervacije-table th,
-body.dark-mode .rezervacije-table td {
+body.dark-mode .vehicles-table th,
+body.dark-mode .vehicles-table td,
+body.dark-mode .reservations-table th,
+body.dark-mode .reservations-table td {
   border: 1px solid #555;
 }
 
@@ -730,11 +730,11 @@ body.dark-mode .admin-footer {
   color: #ccc;
 }
 
-body.dark-mode .biljeska-actions button {
+body.dark-mode .note-actions button {
   background-color: #444;
 }
 
-body.dark-mode .biljeska-actions button:hover {
+body.dark-mode .note-actions button:hover {
   background-color: #666;
 }
 
@@ -766,7 +766,7 @@ body.dark-mode .biljeska-actions button:hover {
   font-weight: bold;
 }
 
-.notifikacije-popup {
+.notifications-popup {
   position: absolute;
   top: 40px;
   right: 0;
@@ -779,18 +779,18 @@ body.dark-mode .biljeska-actions button:hover {
   width: 300px;
 }
 
-.notifikacije-popup ul {
+.notifications-popup ul {
   padding-left: 16px;
 }
 
-body.dark-mode .notifikacije-popup {
+body.dark-mode .notifications-popup {
   background-color: #2c2c2c;
   color: #f0f0f0;
 }
 
 /* === PROFIL STILOVI === */
 
-.profil-popup {
+.profile-popup {
   position: absolute;
   top: 40px;
   right: 10px;
@@ -803,18 +803,18 @@ body.dark-mode .notifikacije-popup {
   width: 240px;
 }
 
-body.dark-mode .profil-popup {
+body.dark-mode .profile-popup {
   background-color: #2c2c2c;
   color: #f0f0f0;
 }
 
-.profil-popup .btn-primary {
+.profile-popup .btn-primary {
    color: black;
 }
 
 /* === PROFIL POPUP === */
 /* Glavni popup s profilom */
-.profil-popup {
+.profile-popup {
   position: absolute;
   top: 60px;
   right: 20px;
@@ -824,19 +824,19 @@ body.dark-mode .profil-popup {
   border-radius: 8px;
   width: 200px;
   z-index: 1000;
-  text-align: left; /* 👈 Poravnanje lijevo */
+  text-align: left;
   font-size: 18px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.profil-popup p {
+.profile-popup p {
   margin: 5px 0;
 }
 
-.profil-popup button {
+.profile-popup button {
   display: block;
   width: 100%;
-  text-align: left; /* 👈 Poravnanje gumba lijevo */
+  text-align: left;
   margin-bottom: 8px;
   background: none;
   border: none;
@@ -847,12 +847,12 @@ body.dark-mode .profil-popup {
   color: black;
 }
 
-.profil-popup button:hover {
+.profile-popup button:hover {
   background-color: #f0f0f0;
   border-radius: 5px;
 }
 
-/* Dropdown za jezik */
+/* Language dropdown */
 .language-dropdown {
   display: flex;
   flex-direction: column;
@@ -866,12 +866,12 @@ body.dark-mode .profil-popup {
   background: #f0f0f0;
   border-radius: 3px;
   border: 1px solid #ccc;
-  /*width: fit-content; /* ⬅️ OVO JE KLJUČNO */
+
   width:88px
 }
 
 
-/* Modal za lozinku */
+/* Password modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -939,7 +939,7 @@ body.dark-mode .profil-popup {
   color: #1f2d3d; /* osiguraj vidljiv tekst */
   margin-bottom: 10px;
   padding: 5px 10px;
-  background-color: #f9f9f9; /* blaga pozadina za vidljivost */
+  background-color: #f9f9f9;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
@@ -972,7 +972,7 @@ body.dark-mode .profil-popup {
 
 .popup-close {
   position: relative;
-  text-align: left; /* 👈 Poravnanje gumba lijevo */
+  text-align: left;
   top: 10px;
   right: 10px;
   background: none;
@@ -991,13 +991,11 @@ body.dark-mode .profil-popup {
 
 
 /* ==========================================================
-   ZAVRŠNO DOTJERIVANJE PROFILA / POSTAVKI I MODALA ZA VOZILO
-   Ova pravila su namjerno na kraju datoteke kako bi nadjačala
-   starije duplikate bez promjene ostatka administratorskog UI-ja.
+   Profile, settings and vehicle modal
    ========================================================== */
 
 /* Profilni izbornik u gornjem desnom kutu */
-.profil-popup {
+.profile-popup {
   top: 54px;
   right: 0;
   width: 250px;
@@ -1009,7 +1007,7 @@ body.dark-mode .profil-popup {
   text-align: left;
 }
 
-.profil-popup .popup-close {
+.profile-popup .popup-close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -1026,23 +1024,23 @@ body.dark-mode .profil-popup {
   line-height: 1;
 }
 
-.profil-popup .popup-close:hover {
+.profile-popup .popup-close:hover {
   color: #1f2d3d;
   background: #eef2f5;
 }
 
-.profil-popup p {
+.profile-popup p {
   margin: 4px 0;
   padding-right: 34px;
 }
 
-.profil-popup p strong {
+.profile-popup p strong {
   color: #1f2d3d;
   font-size: 17px;
   font-weight: 700;
 }
 
-.profil-popup button:not(.popup-close) {
+.profile-popup button:not(.popup-close) {
   width: 100%;
   margin: 5px 0 0;
   padding: 10px 12px;
@@ -1053,18 +1051,18 @@ body.dark-mode .profil-popup {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.profil-popup .btn-secondary {
+.profile-popup .btn-secondary {
   background: transparent;
   color: #1f2d3d;
   border: 1px solid transparent;
 }
 
-.profil-popup .btn-secondary:hover {
+.profile-popup .btn-secondary:hover {
   background: #f4f7f9;
   border-color: #e4e9ed;
 }
 
-.profil-popup .btn-primary {
+.profile-popup .btn-primary {
   margin-top: 9px;
   background: #1f2d3d;
   color: #ffffff;
@@ -1072,12 +1070,12 @@ body.dark-mode .profil-popup {
   text-align: center;
 }
 
-.profil-popup .btn-primary:hover {
+.profile-popup .btn-primary:hover {
   background: #33475b;
   color: #ffffff;
 }
 
-/* Bočna traka postavki */
+/* Settings sidebar */
 .settings-sidebar {
   width: 340px;
   padding: 24px 26px;
@@ -1238,8 +1236,8 @@ body.dark-mode .profil-popup {
   border-color: #c97c77;
 }
 
-/* Gumb "Dodaj" u modalu vozila - jak kontrast teksta i pozadine */
-.vozila-section .modal-actions button {
+/* "Add" button in the vehicle modal, high contrast */
+.vehicles-section .modal-actions button {
   min-width: 96px;
   padding: 10px 18px;
   background: #1f2d3d;
@@ -1249,24 +1247,24 @@ body.dark-mode .profil-popup {
   font-weight: 700;
 }
 
-.vozila-section .modal-actions button:hover {
+.vehicles-section .modal-actions button:hover {
   background: #33475b;
   color: #ffffff !important;
 }
 
-/* Dark mode za novi profil / postavke */
-body.dark-mode .profil-popup {
+/* Dark mode for profile and settings */
+body.dark-mode .profile-popup {
   background: #2c2c2c;
   color: #f0f0f0;
   border-color: #4b4b4b;
 }
 
-body.dark-mode .profil-popup p strong,
-body.dark-mode .profil-popup .btn-secondary {
+body.dark-mode .profile-popup p strong,
+body.dark-mode .profile-popup .btn-secondary {
   color: #f0f0f0;
 }
 
-body.dark-mode .profil-popup .btn-secondary:hover {
+body.dark-mode .profile-popup .btn-secondary:hover {
   background: #3a3a3a;
   border-color: #555;
 }
@@ -1334,4 +1332,9 @@ body.dark-mode .settings-sidebar .settings-delete-btn {
 
 body.dark-mode .settings-sidebar .settings-delete-btn:hover {
   background: #50302f;
+}
+
+.profile-email {
+  font-size: 14px;
+  color: #888;
 }

@@ -1,6 +1,5 @@
-/* EmployeeDashBoard.css
-   Svi stilovi su namjerno scoped/prefiksirani s employee- kako ne bi utjecali
-   na postojeći administratorski dio aplikacije. */
+/* EmployeeDashboard.css
+   All styles are prefixed with employee- so they do not affect the admin UI. */
 
 .employee-dashboard {
   --employee-bg: #f9fbfc;
@@ -304,7 +303,7 @@
 .employee-welcome-image {
   background:
     linear-gradient(180deg, rgba(31, 45, 61, 0.04), rgba(31, 45, 61, 0.18)),
-    url('/employee_poz1.jpg') center / cover no-repeat;
+    url('/employee-hero.jpg') center / cover no-repeat;
   border: 1px solid var(--employee-border);
 }
 

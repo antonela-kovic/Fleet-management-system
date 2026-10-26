@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
+import api, { getSession, errorMessage, logout } from '../services/api';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './EmployeeDashboard.css';
@@ -8,33 +8,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 const statusLabels = {
-  pending: 'Na čekanju',
-  approved: 'Odobreno',
-  rejected: 'Odbijeno',
-  'vehicle assigned': 'Vozilo dodijeljeno',
-  'cancelled by user': 'Otkazano',
-  canceled: 'Otkazano',
-  expired: 'Završeno',
+  pending: 'Pending',
+  approved: 'Approved',
+  rejected: 'Rejected',
+  'vehicle assigned': 'Vehicle assigned',
+  'cancelled by user': 'Cancelled',
+  expired: 'Completed',
 };
 
 const statusClass = (status) => {
   if (status === 'vehicle assigned' || status === 'approved') return 'employee-status-success';
-  if (status === 'rejected' || status === 'cancelled by user' || status === 'canceled') return 'employee-status-danger';
+  if (status === 'rejected' || status === 'cancelled by user') return 'employee-status-danger';
   if (status === 'expired') return 'employee-status-muted';
   return 'employee-status-pending';
 };
 
 const formatDate = (value) => {
   if (!value) return '—';
-  return new Date(value).toLocaleDateString('hr-HR');
+  return new Date(value).toLocaleDateString('en-GB');
 };
 
 const EmployeeDashboard = () => {
-  const userId = sessionStorage.getItem('userId');
-  const employeeName = sessionStorage.getItem('name') || 'zaposleniče';
-  const employeeEmail = sessionStorage.getItem('email') || '';
+  const session = getSession();
+  const employeeName = session.name || 'Employee';
+  const employeeEmail = session.email || '';
 
-  const [activeTab, setActiveTab] = useState('pregled');
+  const [activeTab, setActiveTab] = useState('overview');
   const [darkMode, setDarkMode] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [reservations, setReservations] = useState([]);
@@ -51,19 +50,16 @@ const EmployeeDashboard = () => {
   });
 
   const fetchReservations = useCallback(async () => {
-    if (!userId) return;
-
     try {
       setLoading(true);
-      const response = await axios.get(`/api/employee/reservations/${userId}`);
-      const sorted = [...response.data].sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
-      setReservations(sorted);
+      const response = await api.get('/employee/reservations');
+      setReservations(response.data);
     } catch (error) {
-      console.error('Greška pri dohvaćanju rezervacija:', error.message);
+      setErrorModal({ isOpen: true, message: errorMessage(error, 'Loading reservations failed.') });
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     fetchReservations();
@@ -81,26 +77,24 @@ const EmployeeDashboard = () => {
     const endDate = new Date(newReservation.endDate);
 
     if (startDate < today) {
-      setErrorModal({ isOpen: true, message: 'Početni datum rezervacije ne može biti u prošlosti.' });
+      setErrorModal({ isOpen: true, message: 'The start date cannot be in the past.' });
       return;
     }
 
     if (startDate >= endDate) {
-      setErrorModal({ isOpen: true, message: 'Krajnji datum mora biti nakon početnog datuma.' });
+      setErrorModal({ isOpen: true, message: 'The end date must be after the start date.' });
       return;
     }
 
     try {
-      const reservationData = { ...newReservation, employeeId: userId };
-      await axios.post('/api/employee/reservations', reservationData);
+      await api.post('/employee/reservations', newReservation);
       setNewReservation({ vehicleType: '', startDate: '', endDate: '', purpose: '' });
       await fetchReservations();
-      setActiveTab('rezervacije');
+      setActiveTab('reservations');
     } catch (error) {
-      console.error('Greška pri kreiranju rezervacije:', error.message);
       setErrorModal({
         isOpen: true,
-        message: error.response?.data?.message || 'Rezervaciju nije moguće kreirati. Pokušajte ponovno.',
+        message: errorMessage(error, 'The reservation could not be created. Please try again.'),
       });
     }
   };
@@ -108,20 +102,19 @@ const EmployeeDashboard = () => {
   const cancelReservation = async (reservation) => {
     const start = new Date(reservation.startDate);
     if (new Date() >= start) {
-      setErrorModal({ isOpen: true, message: 'Rezervaciju nije moguće otkazati nakon početka termina.' });
+      setErrorModal({ isOpen: true, message: 'A reservation cannot be cancelled after it has started.' });
       return;
     }
 
-    if (!window.confirm('Jeste li sigurni da želite otkazati ovu rezervaciju?')) return;
+    if (!window.confirm('Are you sure you want to cancel this reservation?')) return;
 
     try {
-      await axios.put(`/api/employee/reservations/${reservation._id}`, { status: 'cancelled by user' });
+      await api.patch(`/employee/reservations/${reservation._id}/cancel`);
       await fetchReservations();
     } catch (error) {
-      console.error('Greška pri otkazivanju rezervacije:', error.message);
       setErrorModal({
         isOpen: true,
-        message: error.response?.data?.message || 'Otkazivanje rezervacije nije uspjelo.',
+        message: errorMessage(error, 'Cancelling the reservation failed.'),
       });
     }
   };
@@ -130,7 +123,7 @@ const EmployeeDashboard = () => {
     if (reservation.status !== 'vehicle assigned') {
       setErrorModal({
         isOpen: true,
-        message: 'Problem možete prijaviti tek kada administrator odobri rezervaciju i dodijeli vam vozilo.',
+        message: 'You can report a problem once the administrator has approved the reservation and assigned you a vehicle.',
       });
       return;
     }
@@ -146,32 +139,23 @@ const EmployeeDashboard = () => {
 
   const submitProblem = async () => {
     if (!problemDescription.trim()) {
-      setErrorModal({ isOpen: true, message: 'Opis problema ne može biti prazan.' });
+      setErrorModal({ isOpen: true, message: 'The problem description cannot be empty.' });
       return;
     }
 
     try {
-      await axios.post('/api/employee/report-problem', {
+      await api.post('/employee/report-problem', {
         reservationId: problemModal.reservation._id,
         description: problemDescription.trim(),
       });
       closeProblemModal();
+      setErrorModal({ isOpen: true, message: 'The problem has been reported to the administrator.' });
     } catch (error) {
-      console.error('Greška tijekom prijavljivanja problema:', error.message);
       setErrorModal({
         isOpen: true,
-        message: error.response?.data?.message || 'Prijava problema nije uspjela. Pokušajte ponovno.',
+        message: errorMessage(error, 'Reporting the problem failed. Please try again.'),
       });
     }
-  };
-
-  const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('role');
-    sessionStorage.removeItem('name');
-    sessionStorage.removeItem('email');
-    window.location.href = '/';
   };
 
   const activeReservations = useMemo(
@@ -185,7 +169,7 @@ const EmployeeDashboard = () => {
   );
 
   const upcomingReservations = useMemo(
-    () => reservations.filter((r) => new Date(r.endDate) >= new Date() && !['rejected', 'cancelled by user', 'canceled'].includes(r.status)),
+    () => reservations.filter((r) => new Date(r.endDate) >= new Date() && !['rejected', 'cancelled by user'].includes(r.status)),
     [reservations]
   );
 
@@ -207,23 +191,23 @@ const EmployeeDashboard = () => {
       <table className="employee-reservations-table">
         <thead>
           <tr>
-            <th>Termin</th>
-            <th>Tip vozila</th>
-            <th>Svrha</th>
-            <th>Dodijeljeno vozilo</th>
+            <th>Dates</th>
+            <th>Vehicle type</th>
+            <th>Purpose</th>
+            <th>Assigned vehicle</th>
             <th>Status</th>
-            <th>Akcije</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="6" className="employee-empty-cell">Nema rezervacija za prikaz.</td>
+              <td colSpan="6" className="employee-empty-cell">No reservations to show.</td>
             </tr>
           ) : (
             items.map((reservation) => {
               const canCancel = new Date(reservation.startDate) > new Date()
-                && !['cancelled by user', 'canceled', 'rejected', 'expired'].includes(reservation.status);
+                && !['cancelled by user', 'rejected', 'expired'].includes(reservation.status);
 
               return (
                 <tr key={reservation._id}>
@@ -233,7 +217,7 @@ const EmployeeDashboard = () => {
                   <td>
                     {reservation.assignedVehicle
                       ? `${reservation.assignedVehicle.name} (${reservation.assignedVehicle.type})`
-                      : 'Nije dodijeljeno'}
+                      : 'Not assigned'}
                   </td>
                   <td>
                     <span className={`employee-status ${statusClass(reservation.status)}`}>
@@ -248,7 +232,7 @@ const EmployeeDashboard = () => {
                           className="employee-btn employee-btn-danger-outline"
                           onClick={() => cancelReservation(reservation)}
                         >
-                          Otkaži
+                          Cancel
                         </button>
                       )}
                       <button
@@ -256,7 +240,7 @@ const EmployeeDashboard = () => {
                         className="employee-btn employee-btn-secondary"
                         onClick={() => openProblemModal(reservation)}
                       >
-                        Prijavi problem
+                        Report problem
                       </button>
                     </div>
                   </td>
@@ -270,47 +254,47 @@ const EmployeeDashboard = () => {
   );
 
   const renderContent = () => {
-    if (activeTab === 'rezervacije') {
+    if (activeTab === 'reservations') {
       return (
         <section className="employee-section">
           <div className="employee-section-heading">
             <div>
-              <h2>Moje rezervacije</h2>
-              <p>Pregled svih aktivnih i prethodnih zahtjeva te njihovih statusa.</p>
+              <h2>My reservations</h2>
+              <p>All current and past requests and their status.</p>
             </div>
-            <button className="employee-btn employee-btn-primary" onClick={() => setActiveTab('nova-rezervacija')}>
-              Nova rezervacija
+            <button className="employee-btn employee-btn-primary" onClick={() => setActiveTab('new-reservation')}>
+              New reservation
             </button>
           </div>
-          {loading ? <div className="employee-loading">Učitavanje rezervacija...</div> : renderReservationTable()}
+          {loading ? <div className="employee-loading">Loading reservations...</div> : renderReservationTable()}
         </section>
       );
     }
 
-    if (activeTab === 'nova-rezervacija') {
+    if (activeTab === 'new-reservation') {
       return (
         <section className="employee-section employee-form-section">
           <div className="employee-section-heading">
             <div>
-              <h2>Nova rezervacija</h2>
-              <p>Unesite željeni termin, tip vozila i svrhu korištenja.</p>
+              <h2>New reservation</h2>
+              <p>Enter the dates, the vehicle type and the purpose of the trip.</p>
             </div>
           </div>
 
           <form className="employee-reservation-form" onSubmit={createReservation}>
             <div className="employee-form-grid">
               <label>
-                Preferirani tip vozila
+                Preferred vehicle type
                 <input
                   type="text"
-                  placeholder="npr. osobni automobil, kombi"
+                  placeholder="e.g. car, van"
                   value={newReservation.vehicleType}
                   onChange={(e) => setNewReservation({ ...newReservation, vehicleType: e.target.value })}
                   required
                 />
               </label>
               <label>
-                Početni datum
+                Start date
                 <input
                   type="date"
                   min={todayString}
@@ -320,7 +304,7 @@ const EmployeeDashboard = () => {
                 />
               </label>
               <label>
-                Završni datum
+                End date
                 <input
                   type="date"
                   min={newReservation.startDate || todayString}
@@ -330,9 +314,9 @@ const EmployeeDashboard = () => {
                 />
               </label>
               <label className="employee-form-purpose">
-                Svrha putovanja
+                Purpose of the trip
                 <textarea
-                  placeholder="Kratko opišite razlog korištenja službenog vozila..."
+                  placeholder="Briefly describe why you need the company vehicle..."
                   value={newReservation.purpose}
                   onChange={(e) => setNewReservation({ ...newReservation, purpose: e.target.value })}
                   required
@@ -340,11 +324,11 @@ const EmployeeDashboard = () => {
               </label>
             </div>
             <div className="employee-form-actions">
-              <button type="button" className="employee-btn employee-btn-secondary" onClick={() => setActiveTab('rezervacije')}>
-                Odustani
+              <button type="button" className="employee-btn employee-btn-secondary" onClick={() => setActiveTab('reservations')}>
+                Cancel
               </button>
               <button type="submit" className="employee-btn employee-btn-primary">
-                Pošalji zahtjev
+                Send request
               </button>
             </div>
           </form>
@@ -352,36 +336,36 @@ const EmployeeDashboard = () => {
       );
     }
 
-    if (activeTab === 'problemi') {
+    if (activeTab === 'problems') {
       return (
         <section className="employee-section">
           <div className="employee-section-heading">
             <div>
-              <h2>Prijava problema ili štete</h2>
-              <p>Problem se može prijaviti za rezervaciju kojoj je administrator već dodijelio vozilo.</p>
+              <h2>Report a problem or damage</h2>
+              <p>A problem can be reported for a reservation that already has an assigned vehicle.</p>
             </div>
           </div>
 
           <div className="employee-problem-grid">
             {assignedReservations.length === 0 ? (
               <div className="employee-empty-state">
-                <strong>Trenutno nemate rezervaciju s dodijeljenim vozilom.</strong>
-                <span>Kada administrator dodijeli vozilo, ovdje će se pojaviti mogućnost prijave problema.</span>
+                <strong>You currently have no reservation with an assigned vehicle.</strong>
+                <span>Once the administrator assigns a vehicle, you can report problems here.</span>
               </div>
             ) : (
               assignedReservations.map((reservation) => (
                 <article className="employee-problem-card" key={reservation._id}>
                   <div>
-                    <span className="employee-card-label">Vozilo</span>
+                    <span className="employee-card-label">Vehicle</span>
                     <h3>
                       {reservation.assignedVehicle
                         ? `${reservation.assignedVehicle.name} (${reservation.assignedVehicle.type})`
-                        : 'Vozilo nije dodijeljeno'}
+                        : 'No vehicle assigned'}
                     </h3>
                     <p>{formatDate(reservation.startDate)} – {formatDate(reservation.endDate)}</p>
                   </div>
                   <button className="employee-btn employee-btn-primary" onClick={() => openProblemModal(reservation)}>
-                    Prijavi problem
+                    Report problem
                   </button>
                 </article>
               ))
@@ -391,7 +375,7 @@ const EmployeeDashboard = () => {
       );
     }
 
-    if (activeTab === 'kalendar') {
+    if (activeTab === 'calendar') {
       const selectedReservations = reservationForDate(selectedDate);
 
       return (
@@ -399,7 +383,7 @@ const EmployeeDashboard = () => {
           <div className="employee-calendar-layout">
             <div className="employee-calendar-card">
               <Calendar
-                locale="hr-HR"
+                locale="en-GB"
                 value={selectedDate}
                 onChange={setSelectedDate}
                 calendarType="iso8601"
@@ -407,33 +391,30 @@ const EmployeeDashboard = () => {
                   if (view !== 'month') return null;
                   return reservationForDate(date).length > 0 ? 'employee-has-reservation' : null;
                 }}
-                formatShortWeekday={(locale, date) =>
-                  date.toLocaleDateString('hr-HR', { weekday: 'short' }).replace('.', '')
-                }
               />
             </div>
 
             <aside className="employee-calendar-sidebar">
               <div className="employee-info-card">
-                <span className="employee-card-label">Odabrani datum</span>
-                <h3>{selectedDate.toLocaleDateString('hr-HR')}</h3>
+                <span className="employee-card-label">Selected date</span>
+                <h3>{selectedDate.toLocaleDateString('en-GB')}</h3>
               </div>
               <div className="employee-info-card">
-                <span className="employee-card-label">Rezervacije toga dana</span>
+                <span className="employee-card-label">Reservations on this day</span>
                 {selectedReservations.length === 0 ? (
-                  <p>Nema rezervacija.</p>
+                  <p>No reservations.</p>
                 ) : (
                   selectedReservations.map((reservation) => (
                     <div className="employee-calendar-item" key={reservation._id}>
-                      <strong>{reservation.vehicleType || 'Vozilo'}</strong>
+                      <strong>{reservation.vehicleType || 'Vehicle'}</strong>
                       <span>{statusLabels[reservation.status] || reservation.status}</span>
                     </div>
                   ))
                 )}
               </div>
               <div className="employee-info-card">
-                <span className="employee-card-label">Legenda</span>
-                <p><span className="employee-legend-dot" /> Dan s rezervacijom</p>
+                <span className="employee-card-label">Legend</span>
+                <p><span className="employee-legend-dot" /> Day with a reservation</p>
               </div>
             </aside>
           </div>
@@ -445,34 +426,34 @@ const EmployeeDashboard = () => {
       <section className="employee-overview">
         <div className="employee-welcome-copy">
           <span className="employee-eyebrow">FLEET MANAGEMENT</span>
-          <h1>Dobrodošli, {employeeName}!</h1>
-          <p>Na jednom mjestu zatražite službeno vozilo, pratite status rezervacije i prijavite problem tijekom korištenja.</p>
+          <h1>Welcome, {employeeName}!</h1>
+          <p>Request a company vehicle, track your reservations and report problems, all in one place.</p>
           <div className="employee-welcome-actions">
-            <button className="employee-btn employee-btn-primary" onClick={() => setActiveTab('nova-rezervacija')}>
-              Kreiraj rezervaciju
+            <button className="employee-btn employee-btn-primary" onClick={() => setActiveTab('new-reservation')}>
+              Create reservation
             </button>
-            <button className="employee-btn employee-btn-secondary" onClick={() => setActiveTab('rezervacije')}>
-              Pregled rezervacija
+            <button className="employee-btn employee-btn-secondary" onClick={() => setActiveTab('reservations')}>
+              View reservations
             </button>
           </div>
         </div>
-        <div className="employee-welcome-image" aria-label="Ilustracija upravljanja voznim parkom" />
+        <div className="employee-welcome-image" aria-label="Fleet management illustration" />
 
         <div className="employee-summary-grid">
           <article className="employee-summary-card">
-            <span>Aktivni zahtjevi</span>
+            <span>Active requests</span>
             <strong>{activeReservations.length}</strong>
-            <small>Na čekanju, odobreno ili dodijeljeno vozilo</small>
+            <small>Pending, approved or with an assigned vehicle</small>
           </article>
           <article className="employee-summary-card">
-            <span>Dodijeljena vozila</span>
+            <span>Assigned vehicles</span>
             <strong>{assignedReservations.length}</strong>
-            <small>Rezervacije spremne za korištenje</small>
+            <small>Reservations ready to use</small>
           </article>
           <article className="employee-summary-card">
-            <span>Nadolazeći termini</span>
+            <span>Upcoming</span>
             <strong>{upcomingReservations.length}</strong>
-            <small>Rezervacije koje još nisu završile</small>
+            <small>Reservations that have not ended yet</small>
           </article>
         </div>
       </section>
@@ -483,16 +464,16 @@ const EmployeeDashboard = () => {
     <div className={`employee-dashboard ${darkMode ? 'employee-dark' : ''}`}>
       <header className="employee-header">
         <div className="employee-header-left">
-          <img src="/dd_logo1.png" alt="Digitalna Dalmacija" className="employee-logo" />
-          <h2>Bok, {employeeName}</h2>
+          <img src="/logo.png" alt="Logo" className="employee-logo" />
+          <h2>Hi, {employeeName}</h2>
         </div>
         <div className="employee-header-right">
           <button
             type="button"
             className="employee-icon-btn"
-            title="Promjena teme"
+            title="Toggle theme"
             onClick={() => setDarkMode((value) => !value)}
-            aria-label="Promjena teme"
+            aria-label="Toggle theme"
           >
             <FontAwesomeIcon
               icon={darkMode ? faSun : faMoon}
@@ -503,9 +484,9 @@ const EmployeeDashboard = () => {
             <button
               type="button"
               className="employee-icon-btn employee-profile-icon"
-              title="Profil"
+              title="Profile"
               onClick={() => setShowProfile((value) => !value)}
-              aria-label="Profil"
+              aria-label="Profile"
             >
               <FontAwesomeIcon icon={faUser} />
             </button>
@@ -513,40 +494,37 @@ const EmployeeDashboard = () => {
               <ProfilePopup
                 name={employeeName}
                 email={employeeEmail}
-                onLogout={handleLogout}
+                onLogout={logout}
                 onClose={() => setShowProfile(false)}
-                apiBase="/api/employee"
               />
             )}
           </div>
         </div>
       </header>
 
-      <nav className="employee-tabs" aria-label="Navigacija zaposlenika">
-        <button className={activeTab === 'pregled' ? 'active' : ''} onClick={() => setActiveTab('pregled')}>POČETNA</button>
-        <button className={activeTab === 'rezervacije' ? 'active' : ''} onClick={() => setActiveTab('rezervacije')}>REZERVACIJE</button>
-        <button className={activeTab === 'nova-rezervacija' ? 'active' : ''} onClick={() => setActiveTab('nova-rezervacija')}>NOVI ZAHTJEV</button>
-        <button className={activeTab === 'problemi' ? 'active' : ''} onClick={() => setActiveTab('problemi')}>PRIJAVA PROBLEMA</button>
-        <button className={activeTab === 'kalendar' ? 'active' : ''} onClick={() => setActiveTab('kalendar')}>KALENDAR</button>
+      <nav className="employee-tabs" aria-label="Employee navigation">
+        <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>HOME</button>
+        <button className={activeTab === 'reservations' ? 'active' : ''} onClick={() => setActiveTab('reservations')}>RESERVATIONS</button>
+        <button className={activeTab === 'new-reservation' ? 'active' : ''} onClick={() => setActiveTab('new-reservation')}>NEW REQUEST</button>
+        <button className={activeTab === 'problems' ? 'active' : ''} onClick={() => setActiveTab('problems')}>REPORT PROBLEM</button>
+        <button className={activeTab === 'calendar' ? 'active' : ''} onClick={() => setActiveTab('calendar')}>CALENDAR</button>
       </nav>
 
       <main className="employee-content">{renderContent()}</main>
 
       <footer className="employee-footer">
-        <strong>Digitalna Dalmacija</strong><br />
-        Ul. Ruđera Boškovića 25<br />
-        21000, Split
+        Fleet Management System
       </footer>
 
       {errorModal.isOpen && (
         <div className="employee-modal-overlay" onClick={() => setErrorModal({ isOpen: false, message: '' })}>
           <div className="employee-modal employee-message-modal" onClick={(e) => e.stopPropagation()}>
             <button className="employee-modal-close" onClick={() => setErrorModal({ isOpen: false, message: '' })}>×</button>
-            <h3>Obavijest</h3>
+            <h3>Notice</h3>
             <p>{errorModal.message}</p>
             <div className="employee-modal-actions">
               <button className="employee-btn employee-btn-primary" onClick={() => setErrorModal({ isOpen: false, message: '' })}>
-                U redu
+                OK
               </button>
             </div>
           </div>
@@ -557,21 +535,21 @@ const EmployeeDashboard = () => {
         <div className="employee-modal-overlay" onClick={closeProblemModal}>
           <div className="employee-modal" onClick={(e) => e.stopPropagation()}>
             <button className="employee-modal-close" onClick={closeProblemModal}>×</button>
-            <h3>Prijava problema</h3>
+            <h3>Report a problem</h3>
             <p className="employee-modal-subtitle">
-              {problemModal.reservation.assignedVehicle?.name || 'Vozilo'} · {formatDate(problemModal.reservation.startDate)} – {formatDate(problemModal.reservation.endDate)}
+              {problemModal.reservation.assignedVehicle?.name || 'Vehicle'} · {formatDate(problemModal.reservation.startDate)} – {formatDate(problemModal.reservation.endDate)}
             </p>
             <label className="employee-modal-label">
-              Opišite problem ili štetu
+              Describe the problem or damage
               <textarea
                 value={problemDescription}
                 onChange={(e) => setProblemDescription(e.target.value)}
-                placeholder="Navedite što se dogodilo i sve važne detalje..."
+                placeholder="What happened? Add any important details..."
               />
             </label>
             <div className="employee-modal-actions">
-              <button className="employee-btn employee-btn-secondary" onClick={closeProblemModal}>Odustani</button>
-              <button className="employee-btn employee-btn-primary" onClick={submitProblem}>Pošalji prijavu</button>
+              <button className="employee-btn employee-btn-secondary" onClick={closeProblemModal}>Cancel</button>
+              <button className="employee-btn employee-btn-primary" onClick={submitProblem}>Send report</button>
             </div>
           </div>
         </div>

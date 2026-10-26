@@ -1,120 +1,56 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import logo from '../slike/digitalna-dalmacija-logo2.webp'; 
+import api, { errorMessage } from '../services/api';
+import logo from '../assets/logo-full.webp';
 import './Register.css';
 
-
+// Registration creates an employee account. Admin accounts are created on the
+// server with `npm run create-admin`.
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const validateEmail = (email) => {
-    if (!email) return false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email.trim());
-  };
+  const update = (field) => (e) => setFormData({ ...formData, [field]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Provjera ispunjenosti obaveznih polja
-    if (!formData.name || !formData.email || !formData.password) {
-      alert('Molimo ispunite sva polja.');
-      return;
-    }
-  
-    // Provjera valjanosti emaila
-    if (!validateEmail(formData.email)) {
-      alert('Neispravan email. Molimo unesite ispravan email.');
-      return;
-    }
-  
-    // Provjera duljine lozinke
+    setError('');
+
     if (formData.password.length < 8) {
-      alert('Lozinka mora sadržavati najmanje 8 znakova.');
+      setError('Password must be at least 8 characters long.');
       return;
     }
-  
-    // Provjera odabira uloge
-    if (!formData.role || formData.role === "") {
-      alert('Molimo odaberite ulogu.');
-      return;
-    }
-  
+
     try {
-      // Slanje podataka na backend
-      await axios.post('/api/auth/register', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      alert('Registracija uspješna! Sada se možete prijaviti.');
-      navigate('/'); // Preusmjeravanje na stranicu za prijavu
-    } catch (error) {
-      if (error.response?.status === 400 && error.response?.data?.message === 'User already exists') {
-        alert('Korisnik s ovim emailom već postoji.');
-      } else {
-        alert('Došlo je do pogreške tijekom registracije. Pokušajte ponovno.');
-      }
+      await api.post('/auth/register', formData);
+      alert('Registration successful. You can now log in.');
+      navigate('/');
+    } catch (err) {
+      setError(errorMessage(err, 'Registration failed. Please try again.'));
     }
-  };
-  
-
-
-  const handleLoginRedirect = () => {
-    navigate('/');
   };
 
   return (
     <div className="login-container">
       <div className="login-form">
         <img src={logo} alt="Logo" />
-        <h2>Registracija</h2>
+        <h2>Register</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Ime"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-          <input
-            type="email"
-            placeholder="E-mail"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
-          />
+          <input type="text" placeholder="Name" value={formData.name} onChange={update('name')} required />
+          <input type="email" placeholder="Email" value={formData.email} onChange={update('email')} required />
           <input
             type="password"
-            placeholder="Lozinka"
+            placeholder="Password (min. 8 characters)"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={update('password')}
             required
           />
-          <select
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            className="form-select"
-            required
-          >
-            <option value="" disabled hidden>
-              Odaberite ulogu
-            </option>
-            <option value="employee">Zaposlenik</option>
-            <option value="admin">Administrator</option>
-          </select>
-          <button type="submit">Registriraj</button>
+          {error && <p className="form-error">{error}</p>}
+          <button type="submit">Register</button>
         </form>
-        <div className="register-link" onClick={handleLoginRedirect}>
-          Već imate račun? Prijavite se
+        <div className="register-link" onClick={() => navigate('/')}>
+          Already have an account? Log in
         </div>
       </div>
       <div className="login-image"></div>

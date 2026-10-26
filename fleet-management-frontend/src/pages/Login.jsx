@@ -1,99 +1,58 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import logo from '../slike/digitalna-dalmacija-logo2.webp';
+import api, { saveSession, errorMessage } from '../services/api';
+import logo from '../assets/logo-full.webp';
 import './Login.css';
-
-
-// const decodeJWT = (token) => {
-//   try {
-//     const base64Url = token.split('.')[1];
-//     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-//     const jsonPayload = decodeURIComponent(
-//       atob(base64)
-//         .split('')
-//         .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
-//         .join('')
-//     );
-//     return JSON.parse(jsonPayload);
-//   } catch (error) {
-//     console.error('Greška prilikom dekodiranja tokena:', error);
-//     return null;
-//   }
-// };
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post('/api/auth/login', { email, password }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    e.preventDefault();
+    setError('');
 
-    const { token, userId, role, name } = response.data;
-    if (token && userId && role && name) {
-      sessionStorage.setItem('token', token);
-      sessionStorage.setItem('userId', userId);
-      sessionStorage.setItem('role', role);
-      sessionStorage.setItem('name', name);
-      sessionStorage.setItem('email', email);
-
-
-      if (role === 'employee') {
-        navigate('/employee-dashboard');
-      } else if (role === 'admin') {
-        navigate('/admin-dashboard');
-      }
-    } else {
-      alert('Prijava nije uspjela: Nedostaju podaci u odgovoru.');
+    try {
+      const { data } = await api.post('/auth/login', { email, password });
+      saveSession(data);
+      navigate(data.role === 'admin' ? '/admin-dashboard' : '/employee-dashboard');
+    } catch (err) {
+      setError(errorMessage(err, 'Login failed. Check your details and try again.'));
     }
-  } catch (error) {
-    console.error('Greška prilikom prijave:', error.response?.data || error.message);
-    alert('Prijava nije uspjela. Provjerite svoje podatke i pokušajte ponovno.');
-  }
-};
+  };
 
-
-const handleRegisterRedirect = () => {
-  navigate('/register');
-};
-
-return (
-  <div className="login-container">
-    <div className="login-form">
-      <img src={logo} alt="Logo" />
-      <h2>Dobro došli!</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Lozinka"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Prijava</button>
-      </form>
-      <div className="register-link" onClick={handleRegisterRedirect}>
-        Nemate račun? Registrirajte se
+  return (
+    <div className="login-container">
+      <div className="login-form">
+        <img src={logo} alt="Logo" />
+        <h2>Welcome!</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && <p className="form-error">{error}</p>}
+          <button type="submit">Log in</button>
+        </form>
+        <div className="register-link" onClick={() => navigate('/register')}>
+          No account yet? Register
+        </div>
       </div>
+      <div className="login-image"></div>
     </div>
-    <div className="login-image"></div>
-  </div>
-
-);
+  );
 };
 
 export default Login;

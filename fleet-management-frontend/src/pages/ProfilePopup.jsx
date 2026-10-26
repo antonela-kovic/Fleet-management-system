@@ -1,390 +1,173 @@
-// Komponenta za korisnički profil:
-// - Email korisnika
-// - Promjena lozinke
-// - Postavke
-// - Profilna slika
-// - Brisanje profila
-// - Odjava
-
-import './AdminDashBoard.css';
+// User profile popup (both roles): name and email, password change,
+// profile picture, account deletion and logout.
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api, { errorMessage, logout } from '../services/api';
+import './AdminDashboard.css';
 
-const ProfilePopup = ({
-  name,
-  email,
-  onLogout,
-  onClose,
-  apiBase = '/api/admin'
-}) => {
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
+const ProfilePopup = ({ name, email, onLogout, onClose }) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showSettingsSidebar, setShowSettingsSidebar] = useState(false);
-
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-
-  const [language] = useState('hr');
   const [profileImage, setProfileImage] = useState(null);
 
-  /*
-    VAŽNO:
-    sessionStorage je odvojen za svaki tab.
+  // Load the profile picture of the logged-in user
+  useEffect(() => {
+    api
+      .get('/profile/image')
+      .then((res) => setProfileImage(res.data.image))
+      .catch(() => setProfileImage(null)); // 404 = no picture yet
+  }, []);
 
-    Tako administrator Maja i zaposlenik Ela mogu biti
-    istovremeno prijavljeni u dva različita taba.
-  */
-  const sessionName = sessionStorage.getItem('name');
-  const sessionEmail = sessionStorage.getItem('email');
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
 
-  const currentName = sessionName || name || '';
-  const currentEmail = sessionEmail || email || '';
-
-  // PROMJENA LOZINKE
   const handlePasswordSave = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      alert('Molimo unesite sva polja.');
+      alert('Please fill in all fields.');
       return;
     }
-
     if (newPassword !== confirmPassword) {
-      alert('Lozinke se ne podudaraju.');
+      alert('The new passwords do not match.');
       return;
     }
 
     try {
-      const response = await axios.put(
-        `${apiBase}/change-password`,
-        {
-          email: currentEmail,
-          currentPassword,
-          newPassword
-        }
-      );
-
-      alert(
-        response.data.message ||
-        'Lozinka je uspješno promijenjena.'
-      );
-
-      setShowPasswordModal(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      const { data } = await api.put('/profile/password', { currentPassword, newPassword });
+      alert(data.message);
+      closePasswordModal();
     } catch (error) {
-      console.error(
-        'Greška pri promjeni lozinke:',
-        error
-      );
-
-      alert(
-        error.response?.data?.message ||
-        'Došlo je do greške.'
-      );
+      alert(errorMessage(error, 'Changing the password failed.'));
     }
   };
 
-  // DOHVAT PROFILNE SLIKE
-  useEffect(() => {
-    if (!currentEmail) return;
-
-    axios
-      .get(
-        `${apiBase}/profile-image/${encodeURIComponent(
-          currentEmail
-        )}`
-      )
-      .then((res) => {
-        setProfileImage(res.data.image);
-      })
-      .catch((err) => {
-        console.log(
-          'Nema slike za ovog korisnika ili greška:',
-          err.message
-        );
-
-        setProfileImage(null);
-      });
-  }, [currentEmail, apiBase]);
-
-  // UPLOAD PROFILNE SLIKE
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
-
     if (!file) return;
+    if (file.size > MAX_IMAGE_BYTES) {
+      alert('The image must be smaller than 2 MB.');
+      return;
+    }
 
     const reader = new FileReader();
-
     reader.onloadend = async () => {
-      const base64 = reader.result;
-
       try {
-        await axios.post(
-          `${apiBase}/profile-image`,
-          {
-            email: currentEmail,
-            image: base64
-          }
-        );
-
-        setProfileImage(base64);
-
-        alert('Slika uspješno postavljena.');
-      } catch (err) {
-        console.error(
-          'Greška kod spremanja slike:',
-          err
-        );
-
-        alert(
-          'Došlo je do greške pri spremanju slike.'
-        );
+        await api.put('/profile/image', { image: reader.result });
+        setProfileImage(reader.result);
+      } catch (error) {
+        alert(errorMessage(error, 'Saving the image failed.'));
       }
     };
-
     reader.readAsDataURL(file);
   };
 
-  // BRISANJE PROFILA
   const handleDeleteProfile = async () => {
-    const confirmDelete = window.confirm(
-      'Jeste li sigurni da želite obrisati vaš profil?'
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm('Are you sure you want to delete your profile? This cannot be undone.')) return;
 
     try {
-      await axios.delete(
-        `${apiBase}/delete-profile/${encodeURIComponent(
-          currentEmail
-        )}`
-      );
-
-      alert('Profil je uspješno obrisan.');
-
-      /*
-        Ne koristimo localStorage.clear()
-        jer bi se tako mogli obrisati podaci drugog korisnika.
-      */
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('role');
-      sessionStorage.removeItem('name');
-      sessionStorage.removeItem('email');
-
-      window.location.href = '/';
+      await api.delete('/profile');
+      alert('Your profile has been deleted.');
+      logout();
     } catch (error) {
-      console.error(
-        'Greška prilikom brisanja profila:',
-        error
-      );
-
-      alert(
-        error.response?.data?.message ||
-        'Došlo je do greške pri brisanju profila.'
-      );
+      alert(errorMessage(error, 'Deleting the profile failed.'));
     }
   };
 
   return (
-    <div className="profil-popup">
+    <div className="profile-popup">
+      <button className="popup-close" onClick={onClose} aria-label="Close">✖</button>
 
-      <button
-        className="popup-close"
-        onClick={onClose}
-      >
-        ✖
-      </button>
+      <p><strong>{name}</strong></p>
+      <p className="profile-email">{email}</p>
 
-      <p>
-        <strong>{currentName}</strong>
-      </p>
+      <button onClick={() => setShowPasswordModal(true)} className="btn-secondary">Change password</button>
+      <button onClick={() => setShowSettingsSidebar(true)} className="btn-secondary">Settings</button>
+      <button onClick={onLogout} className="btn-primary">Log out</button>
 
-      <p
-        style={{
-          fontSize: '14px',
-          color: '#888'
-        }}
-      >
-        {currentEmail}
-      </p>
-
-      <button
-        onClick={() => setShowPasswordModal(true)}
-        className="btn-secondary"
-      >
-        Promjena lozinke
-      </button>
-
-      <button
-        onClick={() => setShowSettingsSidebar(true)}
-        className="btn-secondary"
-      >
-        Postavke
-      </button>
-
-      <button
-        onClick={onLogout}
-        className="btn-primary"
-      >
-        Odjava
-      </button>
-
-      {/* MODAL ZA PROMJENU LOZINKE */}
       {showPasswordModal && (
         <div className="modal-overlay">
-
           <div className="modal">
-
-            <button
-              className="popup-close"
-              onClick={() =>
-                setShowPasswordModal(false)
-              }
-            >
-              ✖
-            </button>
-
-            <h3>Promjena lozinke</h3>
-
+            <button className="popup-close" onClick={closePasswordModal} aria-label="Close">✖</button>
+            <h3>Change password</h3>
             <input
               type="password"
-              placeholder="Trenutna lozinka"
+              placeholder="Current password"
               value={currentPassword}
-              onChange={(e) =>
-                setCurrentPassword(e.target.value)
-              }
+              onChange={(e) => setCurrentPassword(e.target.value)}
             />
-
             <input
               type="password"
-              placeholder="Nova lozinka"
+              placeholder="New password (min. 8 characters)"
               value={newPassword}
-              onChange={(e) =>
-                setNewPassword(e.target.value)
-              }
+              onChange={(e) => setNewPassword(e.target.value)}
             />
-
             <input
               type="password"
-              placeholder="Potvrdi lozinku"
+              placeholder="Confirm new password"
               value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(e.target.value)
-              }
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
-
             <div className="modal-actions">
-
-              <button
-                onClick={handlePasswordSave}
-              >
-                Spremi
-              </button>
-
-              <button
-                onClick={() =>
-                  setShowPasswordModal(false)
-                }
-              >
-                Odustani
-              </button>
-
+              <button onClick={handlePasswordSave}>Save</button>
+              <button onClick={closePasswordModal}>Cancel</button>
             </div>
-
           </div>
-
         </div>
       )}
 
-      {/* SLIDEBAR POSTAVKE */}
       {showSettingsSidebar && (
         <div className="settings-sidebar">
-
           <div className="settings-sidebar-header">
-
-            <h3>Postavke korisnika</h3>
-
+            <h3>User settings</h3>
             <button
               type="button"
               className="settings-close"
-              onClick={() =>
-                setShowSettingsSidebar(false)
-              }
-              aria-label="Zatvori postavke"
+              onClick={() => setShowSettingsSidebar(false)}
+              aria-label="Close settings"
             >
               ✖
             </button>
-
           </div>
 
           <div className="settings-avatar-wrap">
-
             {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Profilna slika"
-                className="settings-avatar"
-              />
+              <img src={profileImage} alt="Profile picture" className="settings-avatar" />
             ) : (
-              <div className="settings-avatar-placeholder">
-                Nema slike
-              </div>
+              <div className="settings-avatar-placeholder">No picture</div>
             )}
-
           </div>
 
           <div className="settings-details">
-
-            <p>
-              <strong>Ime:</strong>
-              <span>{currentName}</span>
-            </p>
-
-            <p>
-              <strong>Email:</strong>
-              <span>{currentEmail}</span>
-            </p>
-
-            <p>
-              <strong>Lozinka:</strong>
-              <span>*********</span>
-            </p>
-
-            <p>
-              <strong>Jezik:</strong>
-              <span>{language.toUpperCase()}</span>
-            </p>
-
+            <p><strong>Name:</strong><span>{name}</span></p>
+            <p><strong>Email:</strong><span>{email}</span></p>
+            <p><strong>Password:</strong><span>*********</span></p>
           </div>
 
           <label className="settings-upload-label">
-
-            Postavi sliku profila
-
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              style={{
-                display: 'none'
-              }}
-            />
-
+            Upload profile picture
+            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
           </label>
 
-          <button
-            className="settings-delete-btn"
-            onClick={handleDeleteProfile}
-          >
-            Brisanje profila
-          </button>
-
+          <button className="settings-delete-btn" onClick={handleDeleteProfile}>Delete profile</button>
         </div>
       )}
-
     </div>
   );
+};
+
+ProfilePopup.propTypes = {
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  onLogout: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default ProfilePopup;

@@ -1,421 +1,166 @@
 # Fleet Management System
 
-Fleet Management System je full-stack web aplikacija za upravljanje voznim parkom.
+A full-stack web application for managing a company's vehicle fleet. Employees request company vehicles, track their reservations and report problems; administrators approve requests, assign vehicles, manage the fleet and keep notes on a shared calendar. Built as a project in a web development course organised by Digitalna Dalmacija.
 
-Sustav omogućuje zaposlenicima kreiranje zahtjeva za korištenje službenih vozila, praćenje vlastitih rezervacija i prijavu problema, dok administratorima omogućuje upravljanje vozilima, rezervacijama, korisničkim zahtjevima i prijavljenim problemima.
+**Stack:** React 18 + Vite · Node.js + Express · MongoDB + Mongoose · JWT authentication · bcrypt
 
-Aplikacija je izrađena korištenjem **Reacta i Vitea** na frontend strani te **Node.js, Express.js i MongoDB** tehnologija na backend strani.
-
----
-
-## Glavne funkcionalnosti
-
-Sustav razlikuje dvije korisničke uloge:
-
-- **Administrator**
-- **Zaposlenik**
-
-Nakon prijave korisnik se automatski preusmjerava na sučelje koje odgovara njegovoj ulozi.
+| Admin dashboard | Employee dashboard |
+|---|---|
+| ![Admin dashboard](docs/user_interface01.png) | ![Employee dashboard](docs/user_interface02.png) |
 
 ---
 
-# Administrator
+## Features
 
-Administrator ima pristup funkcionalnostima za upravljanje cijelim voznim parkom.
+**Employee**
+- Request a vehicle: dates, preferred vehicle type and purpose of the trip
+- See all own reservations with their status (pending → approved → vehicle assigned → completed)
+- Cancel a reservation before it starts
+- Report a problem or damage for a reservation with an assigned vehicle
+- Calendar with highlighted reservation days
 
-### Upravljanje vozilima
+**Administrator**
+- Approve or reject requests and assign an available vehicle
+- Add and delete vehicles; a vehicle in an active reservation cannot be deleted
+- Notifications for vehicle registrations that expire within 7 days
+- See problems reported by employees next to the related reservation
+- Notes and a calendar showing reservations and notes per day
 
-Administrator može:
-
-- pregledavati sva vozila
-- dodavati nova vozila
-- uređivati podatke o vozilima
-- brisati vozila
-- pratiti status vozila
-- pratiti datum registracije vozila
-- označiti vozilo kao dostupno ili zauzeto
-
-### Upravljanje rezervacijama
-
-Administrator može:
-
-- pregledavati sve zahtjeve zaposlenika
-- prihvatiti ili odbiti zahtjev
-- dodijeliti konkretno vozilo zaposleniku
-- pregledavati termin rezervacije
-- vidjeti korisnika koji je kreirao zahtjev
-- pregledavati prijavljene probleme vezane uz rezervaciju
-- brisati rezervacije
-
-### Bilješke
-
-Administrator ima mogućnost:
-
-- dodavanja bilješki
-- pregleda postojećih bilješki
-- evidencije dodatnih informacija važnih za upravljanje voznim parkom
-
-### Kalendar
-
-Administratorski kalendar prikazuje:
-
-- rezervacije
-- bilješke
-- dane koji sadrže rezervaciju
-- dane koji sadrže bilješku
-- dane koji sadrže obje vrste zapisa
-
-Dodatno se prikazuju:
-
-- trenutno vrijeme
-- statistika rezervacija i bilješki
-- legenda događaja u kalendaru
+**Both roles**
+- Profile with password change, profile picture and account deletion
+- Light and dark theme
+- Finished reservations are marked as completed automatically and their vehicles become available again
 
 ---
 
-# Zaposlenik
+## Architecture
 
-Zaposleničko sučelje prilagođeno je kreiranju i praćenju zahtjeva za korištenje službenih vozila.
-
-### Početna stranica
-
-Zaposlenik ima pregled osnovnih informacija i svojih aktivnosti u sustavu.
-
-### Rezervacije
-
-Zaposlenik može:
-
-- pregledavati vlastite rezervacije
-- pregledavati termin rezervacije
-- vidjeti tip vozila
-- vidjeti svrhu putovanja
-- pratiti status zahtjeva
-- vidjeti dodijeljeno vozilo
-- otkazati rezervaciju prije početka rezerviranog termina
-
-### Novi zahtjev
-
-Zaposlenik može poslati novi zahtjev za rezervaciju unosom:
-
-- početnog datuma
-- završnog datuma
-- svrhe korištenja vozila
-- željenog tipa vozila
-
-Zahtjev se nakon slanja prikazuje administratoru koji ga može prihvatiti ili odbiti.
-
-### Prijava problema
-
-Zaposlenik može prijaviti:
-
-- kvar
-- štetu
-- poteškoću vezanu uz vozilo
-
-Prijava problema povezuje se s odgovarajućom rezervacijom i dodijeljenim vozilom.
-
-### Kalendar
-
-Zaposlenički kalendar omogućuje pregled vlastitih rezervacija po datumima.
-
-Dani koji imaju rezervaciju vizualno su označeni kako bi korisnik lakše pratio svoje termine.
-
----
-
-# Korisnički profil
-
-Administrator i zaposlenik imaju pristup vlastitom korisničkom profilu.
-
-Profil omogućuje:
-
-- prikaz imena
-- prikaz e-mail adrese
-- promjenu lozinke
-- postavljanje profilne slike
-- pregled korisničkih postavki
-- brisanje korisničkog profila
-- odjavu
-
-Podaci aktivne prijave spremaju se po korisničkoj sesiji kako bi administratorska i zaposlenička prijava bile međusobno odvojene.
-
----
-
-# Light / Dark mode
-
-Aplikacija podržava:
-
-- **Light mode**
-- **Dark mode**
-
-Korisnik može promijeniti temu pomoću ikone u zaglavlju aplikacije.
-
-Administratorsko i zaposleničko sučelje imaju prilagođen izgled za obje teme.
-
----
-
-# Autentikacija i autorizacija
-
-Za autentikaciju korisnika koristi se **JSON Web Token (JWT)**.
-
-Sustav koristi zaštićene rute kako bi spriječio pristup stranicama korisnicima koji nisu prijavljeni.
-
-Pristup administratorskim i zaposleničkim stranicama dodatno se kontrolira prema korisničkoj ulozi.
-
-Lozinke korisnika pohranjuju se u hashiranom obliku pomoću biblioteke **bcryptjs**.
-
----
-
-# Tehnologije
-
-## Backend
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JSON Web Token
-- bcryptjs
-- dotenv
-- cors
-- nodemon
-
-## Frontend
-
-- React
-- Vite
-- React Router
-- Axios
-- Font Awesome
-- CSS
-
----
-
-# Struktura projekta
-
-```text
-Projekt_Exspress/
-│
-├── server.js
-├── auth.js
-├── admin.js
-├── employee.js
-│
-├── User.js
-├── Vehicle.js
-├── Reservation.js
-├── Issue.js
-├── Note.js
-│
-├── package.json
-├── package-lock.json
-├── .gitignore
-│
-└── fleet-management-frontend/
-    │
-    ├── package.json
-    ├── package-lock.json
-    ├── vite.config.js
-    │
-    ├── public/
-    │
-    └── src/
-        │
-        ├── components/
-        │   ├── AuthPage.jsx
-        │   ├── Navbar.jsx
-        │   └── PrivateRoute.jsx
-        │
-        ├── pages/
-        │   ├── AdminDashBoard.jsx
-        │   ├── AdminDashBoard.css
-        │   ├── EmployeeDashboard.jsx
-        │   ├── EmployeeDashboard.css
-        │   ├── ProfilePopup.jsx
-        │   ├── Login.jsx
-        │   ├── Login.css
-        │   ├── Register.jsx
-        │   └── Register.css
-        │
-        ├── services/
-        │   └── api.js
-        │
-        ├── App.jsx
-        ├── App.css
-        ├── main.jsx
-        └── index.css
+```mermaid
+flowchart LR
+    B[React SPA<br/>Vite dev server :5173] -->|/api proxy<br/>Authorization: Bearer JWT| E[Express API :5000]
+    E --> M1[requireAuth<br/>verifies JWT]
+    M1 --> M2[requireRole<br/>admin / employee]
+    M2 --> R[Routes<br/>auth, profile, employee, admin]
+    R --> D[(MongoDB<br/>users, vehicles,<br/>reservations, issues, notes)]
 ```
 
-`node_modules` direktoriji nisu spremljeni u Git repozitorij. Potrebne ovisnosti instaliraju se pomoću naredbe `npm install`.
+**Security**
+- Passwords are hashed with bcrypt; login returns a JWT valid for one hour.
+- Every API route except login and registration requires a valid token, and admin and employee routes check the role on the server. The frontend route guard only controls navigation.
+- The user is always taken from the verified token, never from the request body, so users can only read and change their own reservations and profile.
+- Self-registration always creates an employee account; admin accounts are created with a server-side script.
+- Login returns the same error for an unknown email and a wrong password.
+- Input is validated with `express-validator`; vehicle updates accept only whitelisted fields.
+
+### Reservation lifecycle
+
+| Status | Set by | Meaning |
+|---|---|---|
+| `pending` | employee creates the request | waiting for the administrator |
+| `approved` / `rejected` | administrator | request accepted or declined |
+| `vehicle assigned` | administrator | a free vehicle is reserved (taken atomically, so it cannot be assigned twice) |
+| `cancelled by user` | employee, before the start date | kept for the administrator's overview |
+| `expired` | server, hourly | end date passed, vehicle released |
 
 ---
 
-# Instalacija i pokretanje
+## Getting started
 
-## 1. Kloniranje repozitorija
+### Prerequisites
+
+- Node.js 18 or newer
+- MongoDB running locally (default `mongodb://localhost:27017`) or a MongoDB Atlas connection string
+
+### 1. Backend
 
 ```bash
-git clone https://github.com/antonela-kovic/Projekt_Exspress.git
-cd Projekt_Exspress
-```
-
----
-
-## 2. MongoDB
-
-Projekt koristi MongoDB bazu podataka.
-
-Za lokalni razvoj potrebno je imati instaliran i pokrenut **MongoDB Community Server**.
-
-Zadani MongoDB port je:
-
-```text
-27017
-```
-
-Primjer lokalne baze:
-
-```text
-mongodb://localhost:27017/fleet_management
-```
-
-Na Windowsu se status MongoDB servisa može provjeriti u PowerShellu:
-
-```powershell
-Get-Service MongoDB
-```
-
-Ako servis nije pokrenut:
-
-```powershell
-Start-Service MongoDB
-```
-
----
-
-## 3. Backend konfiguracija
-
-U glavnom direktoriju projekta potrebno je napraviti `.env` datoteku.
-
-Primjer:
-
-```env
-MONGO_URI=mongodb://localhost:27017/fleet_management
-JWT_SECRET=vas_tajni_jwt_kljuc
-```
-
-
-
----
-
-## 4. Instalacija backend paketa
-
-U glavnom direktoriju projekta:
-
-```bash
+git clone https://github.com/antonela-kovic/fleet-management-system.git
+cd fleet-management-system
 npm install
+cp .env.example .env        # then set JWT_SECRET to a long random value
+npm run create-admin -- admin@example.com "a-strong-password" "Admin Name"
+npm run dev                 # http://localhost:5000
 ```
 
----
-
-## 5. Pokretanje backenda
-
-```bash
-npm run start
-```
-
-Backend se pokreće na:
-
-```text
-http://localhost:5000
-```
-
-Ako je MongoDB pravilno pokrenut, backend će se povezati s bazom podataka.
-
----
-
-# Pokretanje frontenda
-
-Otvorite novi terminal i prijeđite u frontend direktorij:
+### 2. Frontend (second terminal)
 
 ```bash
 cd fleet-management-frontend
-```
-
-Instalirajte frontend pakete:
-
-```bash
 npm install
+npm run dev                 # http://localhost:5173
 ```
 
-Pokrenite Vite razvojni server:
+Register a new account for the employee view, or log in with the admin account created above. Using two browser tabs, an admin and an employee can be logged in at the same time (the session is stored per tab).
+
+### Environment variables
+
+| Variable | Description |
+|---|---|
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret for signing tokens |
+| `PORT` | Backend port (default 5000) |
+| `CLIENT_URL` | Frontend origin allowed by CORS (default `http://localhost:5173`) |
+
+---
+
+## API overview
+
+| Method | Endpoint | Role | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | public | Create an employee account |
+| POST | `/api/auth/login` | public | Log in, returns a JWT |
+| GET / PUT | `/api/profile/image` | any | Own profile picture |
+| PUT | `/api/profile/password` | any | Change own password |
+| DELETE | `/api/profile` | any | Delete own account |
+| GET / POST | `/api/employee/reservations` | employee | Own reservations / new request |
+| PATCH | `/api/employee/reservations/:id/cancel` | employee | Cancel before the start date |
+| POST | `/api/employee/report-problem` | employee | Report a problem for an assigned vehicle |
+| GET | `/api/admin/reservations` | admin | All reservations |
+| PUT / DELETE | `/api/admin/reservations/:id` | admin | Approve, reject, assign a vehicle / delete |
+| GET / POST | `/api/admin/vehicles` | admin | Fleet / add a vehicle |
+| PUT / DELETE | `/api/admin/vehicles/:id` | admin | Update / delete a vehicle |
+| GET | `/api/admin/vehicles/upcoming-registration` | admin | Registrations expiring within 7 days |
+| GET / PUT / DELETE | `/api/admin/issues(/:id)` | admin | Reported problems |
+| GET / POST / PUT / DELETE | `/api/admin/notes(/:id)` | admin | Notes |
+
+---
+
+## Testing
 
 ```bash
-npm run dev
+npm test                                   # backend access-control and validation tests (Jest + Supertest)
+cd fleet-management-frontend && npm run lint && npm run build
 ```
 
-Frontend je zatim dostupan na:
+The backend tests check that protected routes reject missing, invalid and forged tokens, that each role is limited to its own routes, and that invalid input is rejected. They run without a database. GitHub Actions runs the tests, the lint and the frontend build on every push.
 
-```text
-http://localhost:5173
+---
+
+## Project structure
+
+```
+├── app.js                 # Express app: middleware and routes
+├── server.js              # MongoDB connection, expiry job, HTTP server
+├── middleware/auth.js     # requireAuth (JWT) and requireRole
+├── models/                # User, Vehicle, Reservation, Issue, Note
+├── routes/                # auth, profile, employee, admin
+├── services/              # reservation expiry
+├── scripts/createAdmin.js # creates or promotes an admin account
+├── tests/                 # Jest + Supertest
+└── fleet-management-frontend/
+    └── src/
+        ├── components/PrivateRoute.jsx
+        ├── pages/         # Login, Register, AdminDashboard, EmployeeDashboard, ProfilePopup
+        └── services/api.js  # axios instance that attaches the JWT
 ```
 
----
+## Possible improvements
 
-# Pokretanje cijele aplikacije
+- Integration tests against a test database (e.g. `mongodb-memory-server`)
+- Pagination and filtering for reservations
+- Storing profile pictures in object storage instead of base64 in MongoDB
+- Email notifications for request status changes
 
-Za lokalni rad potrebno je imati pokrenuta tri dijela sustava:
+## Author
 
-```text
-MongoDB
-   ↓
-Backend / Express
-http://localhost:5000
-   ↓
-Frontend / React + Vite
-http://localhost:5173
-```
-
-Backend terminal i frontend terminal moraju ostati pokrenuti tijekom korištenja aplikacije.
-
----
-
-# Primjer tijeka korištenja
-
-### Zaposlenik
-
-1. Registrira se ili prijavi.
-2. Otvara stranicu **Novi zahtjev**.
-3. Unosi željeni termin, svrhu i tip vozila.
-4. Zahtjev dobiva status čekanja.
-5. Administrator pregledava zahtjev.
-6. Nakon odobrenja administrator dodjeljuje vozilo.
-7. Zaposlenik vidi dodijeljeno vozilo u svojim rezervacijama.
-8. Ako postoji kvar ili šteta, zaposlenik može poslati prijavu problema.
-
-### Administrator
-
-1. Prijavljuje se kao administrator.
-2. Pregledava nove rezervacijske zahtjeve.
-3. Prihvaća ili odbija zahtjev.
-4. Dodjeljuje dostupno vozilo.
-5. Upravlja voznim parkom.
-6. Pregledava prijavljene probleme.
-7. Koristi kalendar za pregled rezervacija i bilješki.
-
----
-
-# Sigurnost
-
-Projekt koristi nekoliko osnovnih sigurnosnih mehanizama:
-
-- hashiranje lozinki pomoću `bcryptjs`
-- JWT autentikaciju
-- zaštićene frontend rute
-- odvajanje administratorskih i zaposleničkih ovlasti
-- varijable okoline za osjetljive podatke
-- `.gitignore` za izbjegavanje objave `.env` i `node_modules` datoteka
-
----
-
-
-
+Antonela Ković – [GitHub](https://github.com/antonela-kovic)

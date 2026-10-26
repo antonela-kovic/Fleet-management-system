@@ -3,16 +3,16 @@
 .login-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;    /* centriranje po visini */
-  align-items: center;        /* centriranje po širini */
+  justify-content: center;    /* vertical centring */
+  align-items: center;        /* horizontal centring */
   max-width: 900px;
   background-color: white;
   border-radius: 12px;        /* zaobljeni rubovi */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* lagani shadow */
   padding: 30px;              /* prostor unutar forme */
-  margin: 40px auto;          /* razmak odozgo i centriranje */
+  margin: 40px auto;          /* top margin and centring */
   border: 1px solid white;
-  
+
 }
 
 .login-form {
@@ -91,8 +91,14 @@
 .login-image {
   flex: 1;
   min-width: 400px;
-  background-image: url('/Projekt/fleet-management-frontend/public/Slika_vozila.webp');
+  background-image: url('/vehicle.webp');
   background-size: cover;
   background-position: center;
   height: 200px;
+}
+
+.form-error {
+  color: #c0392b;
+  font-size: 14px;
+  margin: 0;
 }
